@@ -15,7 +15,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   register(data: UserRegisterRequest) {
-    return this.http.post<string>(`${this.api}/auth/register`, data, { responseType: 'text' as 'json' });
+    return this.http.post<{ message: string }>(`${this.api}/auth/register`, data);
   }
 
   login(data: UserLoginRequest) {

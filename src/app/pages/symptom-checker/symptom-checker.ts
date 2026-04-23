@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionService } from '../../services/session.service';
 import { AuthService } from '../../services/auth.service';
-import { NextQuestionDto, SessionStatusResponse } from '../../models/models';
+import { DiagnosisResultDto, NextQuestionDto } from '../../models/models';
 
 type Phase = 'start' | 'running' | 'emergency' | 'finished' | 'error';
 
@@ -20,7 +20,7 @@ export class SymptomChecker implements OnInit {
   phase = signal<Phase>('start');
   sessionId = signal<number | null>(null);
   question = signal<NextQuestionDto | null>(null);
-  result = signal<SessionStatusResponse | null>(null);
+  results = signal<DiagnosisResultDto[]>([]);
   answeredCount = signal(0);
   loading = signal(false);
   errorMsg = signal('');
@@ -39,11 +39,20 @@ export class SymptomChecker implements OnInit {
       next: (res) => {
         this.sessionId.set(res.sessionId);
         this.question.set(res.question ?? null);
-        this.phase.set('running');
+        // Check if very first question is already an emergency (edge case)
+        if (res.question?.isEmergency) {
+          this.phase.set('emergency');
+        } else {
+          this.phase.set('running');
+        }
         this.loading.set(false);
       },
-      error: () => {
-        this.errorMsg.set('Session konnte nicht gestartet werden. Bitte erneut versuchen.');
+      error: (err) => {
+        this.errorMsg.set(
+          err.status === 401
+            ? 'Sitzung abgelaufen. Bitte erneut anmelden.'
+            : 'Session konnte nicht gestartet werden. Bitte erneut versuchen.'
+        );
         this.loading.set(false);
       }
     });
@@ -55,50 +64,41 @@ export class SymptomChecker implements OnInit {
     if (sid === null || q === null || this.loading()) return;
 
     this.loading.set(true);
-    this.session.answer(sid, q.questionId, value).subscribe({
+    this.errorMsg.set('');
+
+    // Backend AnswerRequest expects { questionId, answer }
+    // NextQuestionDto.symptomId is what the backend calls questionId in AnswerRequest
+    this.session.answer(sid, q.symptomId, value).subscribe({
       next: (res) => {
         this.answeredCount.update(n => n + 1);
         this.loading.set(false);
 
-        if (res.isEmergency) {
+        if (res.finished) {
+          // Results are directly in AnswerResultDto.top3Results — no extra call needed
+          this.results.set(res.top3Results ?? []);
+          this.phase.set('finished');
+          return;
+        }
+
+        if (!res.nextQuestion) {
+          this.phase.set('error');
+          return;
+        }
+
+        if (res.nextQuestion.isEmergency) {
           this.phase.set('emergency');
           return;
         }
-        if (res.sessionFinished || !res.nextQuestion) {
-          this.loadResult(sid);
-          return;
-        }
+
         this.question.set(res.nextQuestion);
       },
-      error: () => {
-        this.errorMsg.set('Fehler beim Speichern der Antwort.');
+      error: (err) => {
         this.loading.set(false);
-      }
-    });
-  }
-
-  private loadResult(sid: number) {
-    this.session.finish(sid).subscribe({
-      next: () => {
-        this.session.getStatus(sid).subscribe({
-          next: (status) => {
-            this.result.set(status);
-            this.phase.set('finished');
-          },
-          error: () => {
-            this.phase.set('error');
-          }
-        });
-      },
-      error: () => {
-        // finish might already be done — try getStatus anyway
-        this.session.getStatus(sid).subscribe({
-          next: (status) => {
-            this.result.set(status);
-            this.phase.set('finished');
-          },
-          error: () => this.phase.set('error')
-        });
+        this.errorMsg.set(
+          err.status === 400
+            ? 'Ungültige Antwort. Bitte erneut versuchen.'
+            : 'Fehler beim Speichern der Antwort.'
+        );
       }
     });
   }
@@ -125,9 +125,21 @@ export class SymptomChecker implements OnInit {
     this.phase.set('start');
     this.sessionId.set(null);
     this.question.set(null);
-    this.result.set(null);
+    this.results.set([]);
     this.answeredCount.set(0);
     this.errorMsg.set('');
+  }
+
+  dangerLabel(level: number): string {
+    if (level >= 3) return 'Hoch';
+    if (level === 2) return 'Mittel';
+    return 'Niedrig';
+  }
+
+  dangerClass(level: number): string {
+    if (level >= 3) return 'danger-high';
+    if (level === 2) return 'danger-medium';
+    return 'danger-low';
   }
 
   percent(p: number): string {

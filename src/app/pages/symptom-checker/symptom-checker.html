@@ -1,12 +1,13 @@
 <div class="checker-page">
   <div class="container">
 
-    <!-- START -->
+    <!-- ── START SCREEN ──────────────────────────────────────── -->
     @if (phase() === 'start') {
       <div class="checker-start fade-in">
         <div class="checker-icon">🩺</div>
         <h1>Symptom-Checker</h1>
-        <p>Beantworten Sie kurze Ja/Nein-Fragen zu Ihren Symptomen. Unser Algorithmus bewertet die Wahrscheinlichkeit möglicher Erkrankungen.</p>
+        <p>Beantworten Sie bis zu 17 kurze Ja/Nein-Fragen zu Ihren Symptomen.<br>
+           Unser Algorithmus bewertet die Wahrscheinlichkeit möglicher Erkrankungen.</p>
 
         @if (errorMsg()) {
           <div class="checker-error">{{ errorMsg() }}</div>
@@ -18,63 +19,92 @@
       </div>
     }
 
-    <!-- RUNNING -->
-    @if (phase() === 'running') {
+    <!-- ── QUESTION SCREEN ───────────────────────────────────── -->
+    @if (phase() === 'running' && question()) {
       <div class="checker-running fade-in">
+
+        <!-- Progress bar -->
         <div class="checker-progress">
-          <span class="progress-label">Frage {{ answeredCount() + 1 }}</span>
+          <span class="progress-label">
+            Frage {{ question()!.currentQuestion }} von {{ question()!.maxQuestions }}
+          </span>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill"
+                 [style.width.%]="(question()!.currentQuestion / question()!.maxQuestions) * 100">
+            </div>
+          </div>
         </div>
 
-        @if (question()) {
-          <div class="question-card glass">
-            <p class="question-text">{{ question()!.text }}</p>
+        <!-- Meta tags -->
+        <div class="question-meta">
+          @if (question()!['körperRegion']) {
+            <span class="meta-tag">📍 {{ question()!['körperRegion'] }}</span>
+          }
+          @if (question()!.kategorie) {
+            <span class="meta-tag">🏷 {{ question()!.kategorie }}</span>
+          }
+        </div>
 
-            @if (errorMsg()) {
-              <div class="checker-error">{{ errorMsg() }}</div>
-            }
+        <!-- Question card -->
+        <div class="question-card glass">
+          <p class="question-text">{{ question()!.frageText }}</p>
 
-            <div class="answer-buttons">
-              <button class="btn-yes" (click)="answer(true)" [disabled]="loading()">
-                ✓ Ja
-              </button>
-              <button class="btn-no" (click)="answer(false)" [disabled]="loading()">
-                ✗ Nein
-              </button>
-            </div>
+          @if (errorMsg()) {
+            <div class="checker-error">{{ errorMsg() }}</div>
+          }
 
-            @if (loading()) {
-              <div class="checker-loading">Wird ausgewertet…</div>
-            }
+          <div class="answer-buttons">
+            <button class="btn-yes" (click)="answer(true)" [disabled]="loading()">
+              ✓ Ja
+            </button>
+            <button class="btn-no" (click)="answer(false)" [disabled]="loading()">
+              ✗ Nein
+            </button>
           </div>
-        }
+
+          @if (loading()) {
+            <div class="checker-loading">Wird ausgewertet…</div>
+          }
+        </div>
       </div>
     }
 
-    <!-- EMERGENCY -->
+    <!-- ── EMERGENCY SCREEN ──────────────────────────────────── -->
     @if (phase() === 'emergency') {
       <div class="checker-emergency fade-in">
         <div class="emergency-icon">🚨</div>
-        <h2>Notfall erkannt</h2>
-        <p>Ihre Symptome könnten auf einen medizinischen Notfall hinweisen. Bitte rufen Sie sofort den <strong>Notruf 144</strong> an oder begeben Sie sich in die nächste Notaufnahme.</p>
+        <h2>Möglicher Notfall erkannt</h2>
+        <p>Ihre Symptome könnten auf einen medizinischen Notfall hinweisen.</p>
+        <div class="emergency-number">Notruf: <strong>144</strong></div>
+        <p class="emergency-sub">Bitte rufen Sie sofort den Notruf an oder begeben Sie sich
+           in die nächste Notaufnahme.</p>
         <button class="btn-primary" (click)="restart()">Neuen Check starten</button>
       </div>
     }
 
-    <!-- FINISHED -->
-    @if (phase() === 'finished' && result()) {
+    <!-- ── RESULTS SCREEN ────────────────────────────────────── -->
+    @if (phase() === 'finished') {
       <div class="checker-result fade-in">
         <h2>Ihre Auswertung</h2>
         <p class="result-subtitle">Basierend auf {{ answeredCount() }} beantworteten Fragen</p>
 
-        @if (result()!.diagnosedDiseases && result()!.diagnosedDiseases!.length > 0) {
+        @if (results().length > 0) {
           <div class="diagnosis-list">
-            @for (d of result()!.diagnosedDiseases!; track d.disease.id) {
+            @for (d of results(); track d.diseaseId) {
               <div class="diagnosis-card glass">
-                <div class="diagnosis-info">
-                  <span class="diagnosis-name">{{ d.disease.name }}</span>
+                <div class="diagnosis-header">
+                  <span class="diagnosis-name">{{ d.diseaseName }}</span>
+                  <span class="danger-badge" [class]="dangerClass(d.dangerLevel)">
+                    {{ dangerLabel(d.dangerLevel) }}
+                  </span>
                 </div>
-                <div class="diagnosis-bar-wrapper">
-                  <div class="diagnosis-bar" [style.width]="percent(d.probability)"></div>
+                @if (d.description) {
+                  <p class="diagnosis-desc">{{ d.description }}</p>
+                }
+                <div class="diagnosis-bar-row">
+                  <div class="diagnosis-bar-track">
+                    <div class="diagnosis-bar-fill" [style.width]="percent(d.probability)"></div>
+                  </div>
                   <span class="diagnosis-percent">{{ percent(d.probability) }}</span>
                 </div>
               </div>
@@ -82,31 +112,26 @@
           </div>
         } @else {
           <div class="glass result-empty">
-            <p>Keine spezifischen Erkrankungen identifiziert. Bitte konsultieren Sie einen Arzt bei anhaltenden Beschwerden.</p>
-          </div>
-        }
-
-        @if (result()!.geminiExplanation) {
-          <div class="gemini-card glass">
-            <h4>🤖 KI-Erklärung</h4>
-            <p>{{ result()!.geminiExplanation }}</p>
+            <p>Keine spezifischen Erkrankungen identifiziert. Bitte konsultieren Sie
+               einen Arzt bei anhaltenden Beschwerden.</p>
           </div>
         }
 
         <div class="result-disclaimer glass">
-          <p>⚠️ <strong>Wichtig:</strong> Diese Auswertung ersetzt keine ärztliche Diagnose. Konsultieren Sie bei ernsthaften Beschwerden immer einen Arzt.</p>
+          <p>⚠️ <strong>Wichtig:</strong> Diese Auswertung ersetzt keine ärztliche Diagnose.
+             Konsultieren Sie bei ernsthaften Beschwerden immer einen Arzt.</p>
         </div>
 
         <div class="result-actions">
           <button class="btn-primary" (click)="exportPdf()" [disabled]="exporting()">
-            @if (exporting()) { PDF wird erstellt… } @else { PDF exportieren }
+            @if (exporting()) { PDF wird erstellt… } @else { 📄 PDF exportieren }
           </button>
           <button class="btn-secondary" (click)="restart()">Neuen Check starten</button>
         </div>
       </div>
     }
 
-    <!-- ERROR -->
+    <!-- ── ERROR SCREEN ──────────────────────────────────────── -->
     @if (phase() === 'error') {
       <div class="checker-error-page fade-in">
         <div class="checker-icon">⚠️</div>
