@@ -1,1 +1,120 @@
+<div class="checker-page">
+  <div class="container">
 
+    <!-- START -->
+    @if (phase() === 'start') {
+      <div class="checker-start fade-in">
+        <div class="checker-icon">🩺</div>
+        <h1>Symptom-Checker</h1>
+        <p>Beantworten Sie kurze Ja/Nein-Fragen zu Ihren Symptomen. Unser Algorithmus bewertet die Wahrscheinlichkeit möglicher Erkrankungen.</p>
+
+        @if (errorMsg()) {
+          <div class="checker-error">{{ errorMsg() }}</div>
+        }
+
+        <button class="btn-primary checker-start-btn" (click)="startSession()" [disabled]="loading()">
+          @if (loading()) { Starte… } @else { Check starten }
+        </button>
+      </div>
+    }
+
+    <!-- RUNNING -->
+    @if (phase() === 'running') {
+      <div class="checker-running fade-in">
+        <div class="checker-progress">
+          <span class="progress-label">Frage {{ answeredCount() + 1 }}</span>
+        </div>
+
+        @if (question()) {
+          <div class="question-card glass">
+            <p class="question-text">{{ question()!.text }}</p>
+
+            @if (errorMsg()) {
+              <div class="checker-error">{{ errorMsg() }}</div>
+            }
+
+            <div class="answer-buttons">
+              <button class="btn-yes" (click)="answer(true)" [disabled]="loading()">
+                ✓ Ja
+              </button>
+              <button class="btn-no" (click)="answer(false)" [disabled]="loading()">
+                ✗ Nein
+              </button>
+            </div>
+
+            @if (loading()) {
+              <div class="checker-loading">Wird ausgewertet…</div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <!-- EMERGENCY -->
+    @if (phase() === 'emergency') {
+      <div class="checker-emergency fade-in">
+        <div class="emergency-icon">🚨</div>
+        <h2>Notfall erkannt</h2>
+        <p>Ihre Symptome könnten auf einen medizinischen Notfall hinweisen. Bitte rufen Sie sofort den <strong>Notruf 144</strong> an oder begeben Sie sich in die nächste Notaufnahme.</p>
+        <button class="btn-primary" (click)="restart()">Neuen Check starten</button>
+      </div>
+    }
+
+    <!-- FINISHED -->
+    @if (phase() === 'finished' && result()) {
+      <div class="checker-result fade-in">
+        <h2>Ihre Auswertung</h2>
+        <p class="result-subtitle">Basierend auf {{ answeredCount() }} beantworteten Fragen</p>
+
+        @if (result()!.diagnosedDiseases && result()!.diagnosedDiseases!.length > 0) {
+          <div class="diagnosis-list">
+            @for (d of result()!.diagnosedDiseases!; track d.disease.id) {
+              <div class="diagnosis-card glass">
+                <div class="diagnosis-info">
+                  <span class="diagnosis-name">{{ d.disease.name }}</span>
+                </div>
+                <div class="diagnosis-bar-wrapper">
+                  <div class="diagnosis-bar" [style.width]="percent(d.probability)"></div>
+                  <span class="diagnosis-percent">{{ percent(d.probability) }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="glass result-empty">
+            <p>Keine spezifischen Erkrankungen identifiziert. Bitte konsultieren Sie einen Arzt bei anhaltenden Beschwerden.</p>
+          </div>
+        }
+
+        @if (result()!.geminiExplanation) {
+          <div class="gemini-card glass">
+            <h4>🤖 KI-Erklärung</h4>
+            <p>{{ result()!.geminiExplanation }}</p>
+          </div>
+        }
+
+        <div class="result-disclaimer glass">
+          <p>⚠️ <strong>Wichtig:</strong> Diese Auswertung ersetzt keine ärztliche Diagnose. Konsultieren Sie bei ernsthaften Beschwerden immer einen Arzt.</p>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-primary" (click)="exportPdf()" [disabled]="exporting()">
+            @if (exporting()) { PDF wird erstellt… } @else { PDF exportieren }
+          </button>
+          <button class="btn-secondary" (click)="restart()">Neuen Check starten</button>
+        </div>
+      </div>
+    }
+
+    <!-- ERROR -->
+    @if (phase() === 'error') {
+      <div class="checker-error-page fade-in">
+        <div class="checker-icon">⚠️</div>
+        <h2>Etwas ist schiefgelaufen</h2>
+        <p>Die Auswertung konnte nicht geladen werden.</p>
+        <button class="btn-primary" (click)="restart()">Erneut versuchen</button>
+      </div>
+    }
+
+  </div>
+</div>

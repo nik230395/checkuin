@@ -5,50 +5,56 @@
     </div>
 
     <div class="auth-tabs">
-      <button 
-        [class.active]="isLoginMode" 
-        (click)="isLoginMode = true"
+      <button
+        [class.active]="isLoginMode()"
+        (click)="isLoginMode.set(true); error.set(''); successMsg.set('')"
         class="tab-btn">
         Anmelden
       </button>
-      <button 
-        [class.active]="!isLoginMode" 
-        (click)="isLoginMode = false"
+      <button
+        [class.active]="!isLoginMode()"
+        (click)="isLoginMode.set(false); error.set(''); successMsg.set('')"
         class="tab-btn">
         Registrieren
       </button>
     </div>
 
-    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" class="login-form">
-      
-      @if (!isLoginMode) {
-        <div class="input-field fade-in">
-          <label for="name">Vollständiger Name</label>
-          <input type="text" id="name" name="name" ngModel placeholder="Max Mustermann">
-        </div>
-      }
+    @if (error()) {
+      <div class="auth-error">{{ error() }}</div>
+    }
+    @if (successMsg()) {
+      <div class="auth-success">{{ successMsg() }}</div>
+    }
+
+    <form (submit)="$event.preventDefault(); onSubmit(emailInput.value, pwInput.value, nameInput.value)" class="login-form">
+
+      <!-- Name field: always in DOM, hidden for login -->
+      <div class="input-field" [style.display]="isLoginMode() ? 'none' : 'block'">
+        <label for="name">Vollständiger Name</label>
+        <input #nameInput type="text" id="name" name="name" placeholder="Max Mustermann">
+      </div>
 
       <div class="input-field">
         <label for="email">E-Mail-Adresse</label>
-        <input type="email" id="email" name="email" ngModel placeholder="name@example.com" required>
+        <input #emailInput type="email" id="email" name="email" placeholder="name@example.com" required>
       </div>
 
       <div class="input-field">
         <label for="password">Passwort</label>
         <div class="password-wrapper">
-          <input type="password" id="password" name="password" ngModel placeholder="Passwort" required>
+          <input #pwInput type="password" id="password" name="password" placeholder="Passwort" required>
           <span class="eye-icon">👁️</span>
         </div>
       </div>
 
       <div class="form-footer">
-        <button type="submit" class="btn-primary">
-          {{ isLoginMode ? 'Anmelden' : 'Registrieren' }}
+        <button type="submit" class="btn-primary" [disabled]="loading()">
+          @if (loading()) {
+            Laden…
+          } @else {
+            {{ isLoginMode() ? 'Anmelden' : 'Registrieren' }}
+          }
         </button>
-        
-        @if (isLoginMode) {
-          <a href="#" class="link-secondary">Passwort vergessen?</a>
-        }
       </div>
     </form>
   </div>

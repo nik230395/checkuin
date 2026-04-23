@@ -22,7 +22,11 @@
             <button class="search-btn">
                 <span>🔍</span>
             </button>
-            <a routerLink="/login" class="btn-primary download-btn">Login</a>
+            @if (auth.isLoggedIn()) {
+                <button class="btn-primary download-btn" (click)="logout()">Abmelden</button>
+            } @else {
+                <a routerLink="/login" class="btn-primary download-btn">Login</a>
+            }
         </div>
     </nav>
 </header>

@@ -128,3 +128,28 @@
 @media (max-width: 968px) {
     .detail-grid { grid-template-columns: 1fr; }
 }
+
+.d-icd {
+    font-size: 11px;
+    color: #a594f9;
+    font-weight: 600;
+    margin-top: 4px;
+    display: block;
+}
+
+.lexikon-loading,
+.lexikon-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b6e85;
+    font-size: 1.1rem;
+}
+
+.lexikon-error {
+    text-align: center;
+    padding: 40px 20px;
+    color: #c0392b;
+    background: rgba(231, 76, 60, 0.06);
+    border-radius: 16px;
+    border: 1px solid rgba(231, 76, 60, 0.15);
+}

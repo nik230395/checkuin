@@ -1,32 +1,55 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { DiseaseService } from '../../services/disease.service';
+import { Disease } from '../../models/models';
 
 @Component({
   selector: 'app-lexikon',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './lexikon.html',
   styleUrl: './lexikon.css'
 })
-export class Lexikon{
-  // Die Datenliste
-  diseases = [
-    { name: "Influenza (Grippe)", category: "Infektionen", symptoms: "Fieber, Husten, Gliederschmerzen", detail: "Die Influenza unterscheidet sich deutlich von einem normalen grippalen Infekt..." },
-    { name: "Migräne", category: "Neurologie", symptoms: "Einseitiger Kopfschmerz, Lichtempfindlichkeit", detail: "Migräne ist eine komplexe neurologische Erkrankung..." },
-    { name: "Diabetes Typ 2", category: "Stoffwechsel", symptoms: "Durst, häufiges Wasserlassen", detail: "Diabetes mellitus Typ 2 ist eine chronische Stoffwechselerkrankung..." },
-    { name: "Asthma Bronchiale", category: "Atemwege", symptoms: "Atemnot, Pfeifen beim Atmen", detail: "Asthma ist eine chronisch-entzündliche Erkrankung der Atemwege..." },
-    { name: "Bluthochdruck", category: "Herz-Kreislauf", symptoms: "Kopfschmerzen, Schwindel", detail: "Hypertonie ist ein Zustand, bei dem der Druck in den Blutgefäßen dauerhaft erhöht ist..." },
-    { name: "Gastritis", category: "Magen-Darm", symptoms: "Magenschmerzen, Völlegefühl", detail: "Unter einer Gastritis versteht man eine Entzündung der Magenschleimhaut..." }
-  ];
+export class Lexikon implements OnInit {
+  private diseaseService = inject(DiseaseService);
 
-  selectedDisease: any = null;
+  diseases = signal<Disease[]>([]);
+  loading = signal(true);
+  error = signal('');
+  searchQuery = signal('');
+  selectedDisease = signal<Disease | null>(null);
 
-  selectDisease(disease: any) {
-    this.selectedDisease = disease;
+  filteredDiseases = computed(() => {
+    const q = this.searchQuery().toLowerCase().trim();
+    if (!q) return this.diseases();
+    return this.diseases().filter(d =>
+      d.name.toLowerCase().includes(q) ||
+      d.description?.toLowerCase().includes(q)
+    );
+  });
+
+  ngOnInit() {
+    this.diseaseService.getAll().subscribe({
+      next: (data) => {
+        this.diseases.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Krankheitsdaten konnten nicht geladen werden.');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  onSearch(value: string) {
+    this.searchQuery.set(value);
+  }
+
+  selectDisease(disease: Disease) {
+    this.selectedDisease.set(disease);
     window.scrollTo(0, 0);
   }
 
   closeDetail() {
-    this.selectedDisease = null;
+    this.selectedDisease.set(null);
   }
 }
