@@ -1,0 +1,150 @@
+.about-container {
+    padding: 160px 20px 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: radial-gradient(circle at top right, rgba(171, 159, 242, 0.08) 0%, transparent 40%);
+}
+
+/* Header Bereich */
+.about-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.about-header h1 {
+    font-size: 56px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+}
+
+.about-header .lead {
+    font-size: 20px;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Team Grid */
+.team-section h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    margin-bottom: 100px;
+}
+
+/* Team Cards */
+.team-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 32px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.team-card:hover {
+    transform: translateY(-12px);
+    background: white;
+    box-shadow: 0 20px 40px rgba(171, 159, 242, 0.15);
+    border-color: var(--accent-purple);
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 320px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+    overflow: hidden;
+    display: flex;
+    justify-content: center; /* Horizontal zentrieren */
+    align-items: center;     /* Vertikal zentrieren */
+    
+}
+
+.image-placeholder img {
+    width: 80%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    
+}
+
+.team-card:hover img {
+    transform: scale(1.05);
+}
+
+.card-content {
+    padding: 32px;
+}
+
+.card-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.role {
+    color: var(--accent-purple);
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.card-content p:not(.role) {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Vision Sektion */
+.mission-statement {
+    text-align: center;
+    padding: 80px 40px;
+    background: linear-gradient(135deg, rgba(171, 159, 242, 0.1) 0%, rgba(255, 158, 111, 0.1) 100%);
+    border-radius: 40px;
+    margin-top: 60px;
+}
+
+.mission-statement h2 {
+    font-size: 32px;
+    margin-bottom: 24px;
+}
+
+.mission-statement p {
+    font-size: 22px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+    .about-header h1 {
+        font-size: 40px;
+    }
+    
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mission-statement p {
+        font-size: 18px;
+    }
+}

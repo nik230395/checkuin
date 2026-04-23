@@ -1,0 +1,28 @@
+<header class="header-container" [class.scrolled]="isScrolled">
+    <nav class="header-nav glass">
+        <div class="header-left">
+            <a routerLink="/" class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0ZM24.238 18.0645C23.3644 21.6599 20.1585 24.238 16.3533 24.238C11.8385 24.238 8.17846 20.578 8.17846 16.0632C8.17846 11.5484 11.8385 7.88836 16.3533 7.88836C20.1585 7.88836 23.3644 10.4665 24.238 14.0619H20.0886C19.3878 12.7797 18.0267 11.8906 16.4526 11.8906C14.1611 11.8906 12.3045 13.7472 12.3045 16.0387C12.3045 18.3302 14.1611 20.1868 16.4526 20.1868C18.0267 20.1868 19.3878 19.2977 20.0886 18.0155L24.238 18.0645Z" fill="#AB9FF2" />
+                </svg>
+                <span class="logo-text">CheckuIn</span>
+            </a>
+        </div>
+
+        <div class="header-center">
+            <ul class="nav-links">
+                <li><a routerLink="/home">Home</a></li>
+                <li><a routerLink="/lexikon">Lexikon</a></li>
+                <li><a routerLink="/team">Team</a></li>
+                <li><a routerLink="/symptom-Checker">Symptom-Checker</a></li>
+            </ul>
+        </div>
+
+        <div class="header-right">
+            <button class="search-btn">
+                <span>🔍</span>
+            </button>
+            <a routerLink="/login" class="btn-primary download-btn">Login</a>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --accent-purple: #ab9ff2;
+    --gradient-blob-1: radial-gradient(circle, rgba(171, 159, 242, 0.2) 0%, rgba(171, 159, 242, 0) 70%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif; /* Oder deine gewählte Schriftart */
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+:root {
+    --gradient-blob-1: radial-gradient(circle, rgba(171, 159, 242, 0.4) 0%, rgba(171, 159, 242, 0) 70%);
+    --gradient-blob-2: radial-gradient(circle, rgba(124, 77, 255, 0.3) 0%, rgba(124, 77, 255, 0) 70%);
+}

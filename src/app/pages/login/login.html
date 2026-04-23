@@ -1,0 +1,55 @@
+<div class="login-wrapper">
+  <div class="login-card shadow-lg">
+    <div class="login-header">
+      <h2>Willkommen bei CheckuIn</h2>
+    </div>
+
+    <div class="auth-tabs">
+      <button 
+        [class.active]="isLoginMode" 
+        (click)="isLoginMode = true"
+        class="tab-btn">
+        Anmelden
+      </button>
+      <button 
+        [class.active]="!isLoginMode" 
+        (click)="isLoginMode = false"
+        class="tab-btn">
+        Registrieren
+      </button>
+    </div>
+
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" class="login-form">
+      
+      @if (!isLoginMode) {
+        <div class="input-field fade-in">
+          <label for="name">Vollständiger Name</label>
+          <input type="text" id="name" name="name" ngModel placeholder="Max Mustermann">
+        </div>
+      }
+
+      <div class="input-field">
+        <label for="email">E-Mail-Adresse</label>
+        <input type="email" id="email" name="email" ngModel placeholder="name@example.com" required>
+      </div>
+
+      <div class="input-field">
+        <label for="password">Passwort</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" ngModel placeholder="Passwort" required>
+          <span class="eye-icon">👁️</span>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button type="submit" class="btn-primary">
+          {{ isLoginMode ? 'Anmelden' : 'Registrieren' }}
+        </button>
+        
+        @if (isLoginMode) {
+          <a href="#" class="link-secondary">Passwort vergessen?</a>
+        }
+      </div>
+    </form>
+  </div>
+</div>

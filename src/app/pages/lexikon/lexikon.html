@@ -1,0 +1,62 @@
+<div class="lexikon-page">
+  <div class="container">
+
+    @if (!selectedDisease) {
+      <div class="lexikon-header fade-in">
+        <h1>Krankheitslexikon</h1>
+        <p>Wissenschaftlich fundierte Informationen zu häufigen Erkrankungen.</p>
+
+        <div class="lexikon-search glass">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Krankheit oder Symptom suchen..." />
+        </div>
+      </div>
+
+      <div class="lexikon-grid">
+        @for (disease of diseases; track disease.name) {
+          <div class="disease-card glass" (click)="selectDisease(disease)">
+            <div class="d-icon">📖</div>
+            <div class="d-content">
+              <span class="d-category">{{ disease.category }}</span>
+              <h3>{{ disease.name }}</h3>
+              <p>{{ disease.symptoms }}</p>
+            </div>
+            <span class="d-arrow">→</span>
+          </div>
+        }
+      </div>
+    }
+
+    @else {
+      <div class="disease-detail fade-in">
+        <button class="btn-back" (click)="closeDetail()">← Zurück zum Lexikon</button>
+        
+        <div class="detail-header">
+          <span class="d-category">{{ selectedDisease.category }}</span>
+          <h1>{{ selectedDisease.name }}</h1>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-main glass">
+            <section>
+              <h4>Überblick</h4>
+              <p>{{ selectedDisease.detail }}</p>
+            </section>
+            <section>
+              <h4>Typische Symptome</h4>
+              <p>{{ selectedDisease.symptoms }}</p>
+            </section>
+          </div>
+
+          <div class="detail-sidebar">
+            <div class="sidebar-card glass">
+              <h4>Wann zum Arzt?</h4>
+              <p>Bei Atemnot, anhaltendem Fieber oder plötzlicher Verschlechterung des Zustands.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

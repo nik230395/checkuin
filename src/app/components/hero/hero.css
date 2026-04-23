@@ -1,0 +1,130 @@
+.hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding-top: 100px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 72px;
+    line-height: 1.1;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.hero p {
+    font-size: 20px;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Button-Styling (Falls btn-primary nicht global ist) */
+.hero-cta {
+    padding: 18px 40px;
+    font-size: 18px;
+    background-color: var(--accent-purple);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+.hero-cta:hover {
+    transform: scale(1.05);
+}
+
+/* Animations-Klassen (Ersatz für motion.div) */
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-up-delay {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+}
+
+.scale-in {
+    opacity: 0;
+    animation: scaleIn 0.5s ease-out 0.4s forwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Animated Blobs */
+.hero-blobs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    filter: blur(80px);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+.blob-1 {
+    width: 600px;
+    height: 600px;
+    background: var(--gradient-blob-1);
+    top: -100px;
+    right: -100px;
+    animation: moveBlob1 20s infinite alternate;
+}
+
+.blob-2 {
+    width: 500px;
+    height: 500px;
+    background: var(--gradient-blob-2);
+    bottom: -50px;
+    left: -50px;
+    animation: moveBlob2 25s infinite alternate;
+}
+
+.blob-3 {
+    width: 400px;
+    height: 400px;
+    background: rgba(171, 159, 242, 0.2);
+    top: 50%;
+    left: 40%;
+    animation: moveBlob3 15s infinite alternate;
+}
+
+/* Keyframes für die Blobs */
+@keyframes moveBlob1 { from { transform: translate(0, 0); } to { transform: translate(-100px, 100px); } }
+@keyframes moveBlob2 { from { transform: translate(0, 0); } to { transform: translate(100px, -50px); } }
+@keyframes moveBlob3 { from { transform: translate(0, 0); } to { transform: translate(-50px, -100px); } }
+
+@media (max-width: 768px) {
+    .hero h1 { font-size: 48px; }
+    .hero p { font-size: 18px; }
+}

@@ -1,0 +1,110 @@
+.header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+    z-index: 1000;
+    transition: padding 0.3s ease;
+}
+
+.header-container.scrolled {
+    padding: 12px 0;
+}
+
+
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1100px;
+    padding: 8px 12px 8px 24px;
+    border-radius: 100px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text-primary);
+}
+
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 4px;
+    border-radius: 100px;
+}
+
+.nav-links li a {
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.nav-links li a:hover {
+    background-color: white;
+    color: var(--text-primary);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.search-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.download-btn {
+    background-color: var(--accent-purple);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (max-width: 968px) {
+    .header-center {
+        display: none;
+    }
+}

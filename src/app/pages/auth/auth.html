@@ -1,0 +1,75 @@
+<div class="auth-page">
+    <div class="container">
+        <div class="auth-card glass fade-in-up">
+            
+            <div class="auth-header">
+                @if (mode === 'login') {
+                    <h2>Willkommen zurück</h2>
+                    <p>Melden Sie sich an, um Ihre Checks zu verwalten.</p>
+                } @else if (mode === 'register') {
+                    <h2>Konto erstellen</h2>
+                    <p>Starten Sie Ihre Reise zu mehr medizinischer Klarheit.</p>
+                } @else if (mode === 'verify') {
+                    <h2>E-Mail verifizieren</h2>
+                    <p>Wir haben einen Code an Ihre E-Mail gesendet.</p>
+                }
+            </div>
+
+            @if (mode === 'login') {
+                <form class="auth-form" (submit)="handleFormSubmit($event)">
+                    <div class="form-group">
+                        <label>E-Mail Adresse</label>
+                        <input type="email" placeholder="name@beispiel.at" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Passwort</label>
+                        <input type="password" placeholder="••••••••" required />
+                    </div>
+                    <button type="submit" class="btn-primary auth-submit">Anmelden</button>
+                    <p class="auth-footer">
+                        Noch kein Konto? <a href="javascript:void(0)" (click)="setMode('register')">Jetzt registrieren</a>
+                    </p>
+                </form>
+            }
+
+            @else if (mode === 'register') {
+                <form class="auth-form" (submit)="handleFormSubmit($event)">
+                    <div class="form-group">
+                        <label>Vollständiger Name</label>
+                        <input type="text" placeholder="Max Mustermann" required />
+                    </div>
+                    <div class="form-group">
+                        <label>E-Mail Adresse</label>
+                        <input type="email" placeholder="name@beispiel.at" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Passwort</label>
+                        <input type="password" placeholder="Mind. 10 Zeichen" required />
+                    </div>
+                    <button type="submit" class="btn-primary auth-submit">Registrieren</button>
+                    <p class="auth-footer">
+                        Bereits ein Konto? <a href="javascript:void(0)" (click)="setMode('login')">Anmelden</a>
+                    </p>
+                </form>
+            }
+
+            @else if (mode === 'verify') {
+                <div class="auth-verify-content">
+                    <div class="verify-code-inputs">
+                        <input type="text" maxLength="1" class="code-input" />
+                        <input type="text" maxLength="1" class="code-input" />
+                        <input type="text" maxLength="1" class="code-input" />
+                        <input type="text" maxLength="1" class="code-input" />
+                    </div>
+                    <button class="btn-primary auth-submit" (click)="setMode('login')">Code bestätigen</button>
+                    <p class="auth-footer">
+                        Nichts erhalten? <button class="btn-text">Code erneut senden</button>
+                    </p>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+

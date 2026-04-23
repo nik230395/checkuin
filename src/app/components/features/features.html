@@ -1,0 +1,26 @@
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="features-header">
+            <h2>Präzision in jeder Diagnose</h2>
+        </div>
+
+        <div class="features-grid">
+            @for (feature of features; track feature.title) {
+                <div 
+                    class="feature-card fade-in-up" 
+                    [style.backgroundColor]="feature.color"
+                >
+                    <div class="feature-card-content">
+                        <h3>{{ feature.title }}</h3>
+                        <p>{{ feature.description }}</p>
+                    </div>
+                    <div class="feature-card-image">
+                        <div class="image-wrapper">
+                            <img [src]="feature.image" [alt]="feature.title" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
