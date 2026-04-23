@@ -3,7 +3,7 @@ export interface AuthResponse {
 }
 
 export interface UserLoginRequest {
-  usernameOrEmail: string;
+  username: string;  // backend field name — accepts email OR username
   password: string;
 }
 

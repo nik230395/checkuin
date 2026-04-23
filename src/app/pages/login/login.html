@@ -7,26 +7,34 @@
     <div class="auth-tabs">
       <button
         [class.active]="isLoginMode()"
-        (click)="isLoginMode.set(true); error.set(''); successMsg.set('')"
+        (click)="isLoginMode.set(true); error.set(''); successMsg.set(''); unverifiedUsername.set('')"
         class="tab-btn">
         Anmelden
       </button>
       <button
         [class.active]="!isLoginMode()"
-        (click)="isLoginMode.set(false); error.set(''); successMsg.set('')"
+        (click)="isLoginMode.set(false); error.set(''); successMsg.set(''); unverifiedUsername.set('')"
         class="tab-btn">
         Registrieren
       </button>
     </div>
 
     @if (error()) {
-      <div class="auth-error">{{ error() }}</div>
+      <div class="auth-error">
+        {{ error() }}
+        @if (unverifiedUsername()) {
+          <br/>
+          <button class="resend-btn" (click)="resendVerification()" [disabled]="loading()">
+            Bestätigungs-E-Mail erneut senden
+          </button>
+        }
+      </div>
     }
     @if (successMsg()) {
       <div class="auth-success">{{ successMsg() }}</div>
     }
 
-    <form (submit)="$event.preventDefault(); onSubmit(emailInput.value, pwInput.value, nameInput.value)" class="login-form">
+    <form (submit)="$event.preventDefault(); onSubmit(loginInput.value, pwInput.value, nameInput.value)" class="login-form">
 
       <!-- Name field: always in DOM, hidden for login -->
       <div class="input-field" [style.display]="isLoginMode() ? 'none' : 'block'">
@@ -35,14 +43,18 @@
       </div>
 
       <div class="input-field">
-        <label for="email">E-Mail-Adresse</label>
-        <input #emailInput type="email" id="email" name="email" placeholder="name@example.com" required>
+        <label for="loginInput">{{ isLoginMode() ? 'E-Mail oder Benutzername' : 'E-Mail-Adresse' }}</label>
+        <input #loginInput type="text" id="loginInput" name="loginInput"
+               [placeholder]="isLoginMode() ? 'name@example.com oder username' : 'name@example.com'"
+               required>
       </div>
 
       <div class="input-field">
         <label for="password">Passwort</label>
         <div class="password-wrapper">
-          <input #pwInput type="password" id="password" name="password" placeholder="Passwort" required>
+          <input #pwInput type="password" id="password" name="password"
+                 [placeholder]="isLoginMode() ? 'Passwort' : 'Mind. 8 Zeichen'"
+                 required>
           <span class="eye-icon">👁️</span>
         </div>
       </div>
