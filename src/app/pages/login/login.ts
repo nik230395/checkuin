@@ -16,6 +16,9 @@ export class Login implements OnInit {
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
 
+  /** 'login' | 'register' | 'forgot' */
+  mode = signal<'login' | 'register' | 'forgot'>('login');
+  /** @deprecated use mode() === 'login' */
   isLoginMode = signal(true);
   loading = signal(false);
   error = signal('');
@@ -23,14 +26,47 @@ export class Login implements OnInit {
   // for "resend verification" flow
   unverifiedUsername = signal('');
 
+  setMode(m: 'login' | 'register' | 'forgot') {
+    this.mode.set(m);
+    this.isLoginMode.set(m === 'login');
+    this.error.set('');
+    this.successMsg.set('');
+    this.unverifiedUsername.set('');
+  }
+
+  forgotPassword(email: string) {
+    if (!email?.trim()) {
+      this.error.set('Bitte E-Mail-Adresse eingeben.');
+      return;
+    }
+    this.loading.set(true);
+    this.http.post(`${environment.apiUrl}/auth/forgot-password`, { email: email.trim() }).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.successMsg.set('Falls ein Konto mit dieser E-Mail existiert, wurde ein Reset-Link gesendet.');
+        this.error.set('');
+      },
+      error: () => {
+        this.loading.set(false);
+        this.error.set('Fehler beim Senden. Bitte erneut versuchen.');
+      }
+    });
+  }
+
   ngOnInit() {
     // Handle redirect from email verification link
     this.route.queryParams.subscribe(params => {
       if (params['verified'] === 'true') {
-        this.successMsg.set('✓ E-Mail erfolgreich bestätigt! Du kannst dich jetzt anmelden.');
+        this.successMsg.set('E-Mail erfolgreich bestätigt. Du kannst dich jetzt anmelden.');
       }
       if (params['verifyError'] === 'true') {
         this.error.set('Verifizierungs-Link ungültig oder abgelaufen. Bitte erneut anfordern.');
+      }
+      if (params['sessionExpired'] === 'true') {
+        this.error.set('Sitzung abgelaufen. Bitte erneut anmelden.');
+      }
+      if (params['passwordReset'] === 'true') {
+        this.successMsg.set('Passwort erfolgreich geändert. Du kannst dich jetzt anmelden.');
       }
     });
   }
@@ -71,7 +107,7 @@ export class Login implements OnInit {
     } else {
       // Registration
       if (!name?.trim()) {
-        this.error.set('Bitte Namen eingeben.');
+        this.error.set('Bitte Benutzernamen eingeben.');
         this.loading.set(false);
         return;
       }
@@ -80,7 +116,7 @@ export class Login implements OnInit {
         this.loading.set(false);
         return;
       }
-      const username = name.trim().toLowerCase().replace(/\s+/g, '_');
+      const username = name.trim();
       this.auth.register({ username, email: emailOrUsername, password }).subscribe({
         next: () => {
           this.loading.set(false);
@@ -89,8 +125,8 @@ export class Login implements OnInit {
         },
         error: (err) => {
           this.loading.set(false);
+          const msg: string = err.error?.error ?? '';
           if (err.status === 409 || err.status === 400) {
-            const msg: string = err.error?.error ?? '';
             if (msg.toLowerCase().includes('email')) {
               this.error.set('Diese E-Mail-Adresse ist bereits registriert.');
             } else if (msg.toLowerCase().includes('username') || msg.toLowerCase().includes('benutzer')) {
@@ -98,6 +134,8 @@ export class Login implements OnInit {
             } else {
               this.error.set('Registrierung fehlgeschlagen. E-Mail oder Benutzername bereits vorhanden.');
             }
+          } else if (err.status === 503) {
+            this.error.set('Bestätigungs-E-Mail konnte nicht gesendet werden. Bitte später erneut versuchen.');
           } else {
             this.error.set('Registrierung fehlgeschlagen. Bitte erneut versuchen.');
           }

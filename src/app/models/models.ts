@@ -16,6 +16,12 @@ export interface UserRegisterRequest {
   password: string;
 }
 
+export interface UserProfile {
+  username: string;
+  email: string;
+  verified: boolean;
+}
+
 // ─── Disease (Lexikon) ───────────────────────────────────────────────────────
 
 export interface Disease {
@@ -23,6 +29,41 @@ export interface Disease {
   name: string;
   description?: string;
   icdCode?: string;
+  dangerLevel?: number;
+  // Lexikon-Detailfelder (vom Backend als volle Entity zurückgegeben)
+  overview?: string;
+  symptoms?: string;
+  causes?: string;
+  diagnosis?: string;
+  treatment?: string;
+  progression?: string;
+  whenToSeeDoctor?: string;
+  sources?: string;
+  category?: string;
+}
+
+// ─── Disease Comparison ──────────────────────────────────────────────────────
+
+export interface DifferentiatorDto {
+  symptomId:   number;
+  symptomName: string;
+  symptomKey:  string;
+  probA:       number;
+  probB:       number;
+  delta:       number;
+  favorsA:     boolean;
+}
+
+export interface DiseaseComparison {
+  diseaseAId:         number;
+  diseaseAName:       string;
+  diseaseACategory:   string;
+  diseaseADangerLevel: number;
+  diseaseBId:         number;
+  diseaseBName:       string;
+  diseaseBCategory:   string;
+  diseaseBDangerLevel: number;
+  differentiators:    DifferentiatorDto[];
 }
 
 // ─── Anamnesis / Session ─────────────────────────────────────────────────────
@@ -65,7 +106,7 @@ export interface DiagnosisResultDto {
 /** Matches backend SessionStatusResponse exactly */
 export interface SessionStatusResponse {
   sessionId: number;
-  status: string;
+  status: string;      // AKTIV | PAUSIERT | ABGESCHLOSSEN
   answeredCount: number;
   startedAt: string;
   completedAt?: string;

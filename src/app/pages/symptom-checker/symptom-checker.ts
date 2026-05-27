@@ -4,7 +4,7 @@ import { SessionService } from '../../services/session.service';
 import { AuthService } from '../../services/auth.service';
 import { DiagnosisResultDto, NextQuestionDto } from '../../models/models';
 
-type Phase = 'start' | 'running' | 'emergency' | 'finished' | 'error';
+type Phase = 'start' | 'running' | 'emergency' | 'finished' | 'error' | 'paused';
 
 @Component({
   selector: 'app-symptom-checker',
@@ -14,21 +14,30 @@ type Phase = 'start' | 'running' | 'emergency' | 'finished' | 'error';
 })
 export class SymptomChecker implements OnInit {
   private session = inject(SessionService);
-  private auth = inject(AuthService);
-  private router = inject(Router);
+  private auth    = inject(AuthService);
+  private router  = inject(Router);
 
-  phase = signal<Phase>('start');
-  sessionId = signal<number | null>(null);
-  question = signal<NextQuestionDto | null>(null);
-  results = signal<DiagnosisResultDto[]>([]);
+  phase         = signal<Phase>('start');
+  sessionId     = signal<number | null>(null);
+  question      = signal<NextQuestionDto | null>(null);
+  results       = signal<DiagnosisResultDto[]>([]);
   answeredCount = signal(0);
-  loading = signal(false);
-  errorMsg = signal('');
-  exporting = signal(false);
+  loading       = signal(false);
+  errorMsg      = signal('');
+  exporting     = signal(false);
+  pausing       = signal(false);
 
   ngOnInit() {
     if (!this.auth.isLoggedIn()) {
       this.router.navigate(['/login']);
+    }
+    // Resume einer weitergeleiteten Session (aus Account-Seite)
+    const state = history.state as { resumeSession?: { sessionId: number; question: NextQuestionDto } };
+    if (state?.resumeSession) {
+      const { sessionId, question } = state.resumeSession;
+      this.sessionId.set(sessionId);
+      this.question.set(question);
+      this.phase.set(question.isEmergency ? 'emergency' : 'running');
     }
   }
 
@@ -39,12 +48,7 @@ export class SymptomChecker implements OnInit {
       next: (res) => {
         this.sessionId.set(res.sessionId);
         this.question.set(res.question ?? null);
-        // Check if very first question is already an emergency (edge case)
-        if (res.question?.isEmergency) {
-          this.phase.set('emergency');
-        } else {
-          this.phase.set('running');
-        }
+        this.phase.set(res.question?.isEmergency ? 'emergency' : 'running');
         this.loading.set(false);
       },
       error: (err) => {
@@ -60,32 +64,31 @@ export class SymptomChecker implements OnInit {
 
   answer(value: boolean) {
     const sid = this.sessionId();
-    const q = this.question();
+    const q   = this.question();
     if (sid === null || q === null || this.loading()) return;
 
     this.loading.set(true);
     this.errorMsg.set('');
 
-    // Backend AnswerRequest expects { questionId, answer }
-    // NextQuestionDto.symptomId is what the backend calls questionId in AnswerRequest
     this.session.answer(sid, q.symptomId, value).subscribe({
       next: (res) => {
         this.answeredCount.update(n => n + 1);
         this.loading.set(false);
 
         if (res.finished) {
-          // Results are directly in AnswerResultDto.top3Results — no extra call needed
           this.results.set(res.top3Results ?? []);
           this.phase.set('finished');
           return;
         }
 
         if (!res.nextQuestion) {
-          this.phase.set('error');
+          // Alle Symptome beantwortet ohne klares Ergebnis → trotzdem zeigen
+          this.phase.set('finished');
           return;
         }
 
         if (res.nextQuestion.isEmergency) {
+          this.question.set(res.nextQuestion);
           this.phase.set('emergency');
           return;
         }
@@ -103,6 +106,22 @@ export class SymptomChecker implements OnInit {
     });
   }
 
+  pauseSession() {
+    const sid = this.sessionId();
+    if (sid === null || this.pausing()) return;
+    this.pausing.set(true);
+    this.session.pause(sid).subscribe({
+      next: () => {
+        this.pausing.set(false);
+        this.router.navigate(['/account'], { queryParams: { paused: '1' } });
+      },
+      error: () => {
+        this.pausing.set(false);
+        this.errorMsg.set('Session konnte nicht pausiert werden.');
+      }
+    });
+  }
+
   exportPdf() {
     const sid = this.sessionId();
     if (!sid) return;
@@ -110,15 +129,19 @@ export class SymptomChecker implements OnInit {
     this.session.exportPdf(sid).subscribe({
       next: (blob) => {
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `checkuin-bericht-${sid}.pdf`;
+        const a   = document.createElement('a');
+        a.href     = url;
+        a.download  = `checkuin-bericht-${sid}.pdf`;
         a.click();
         URL.revokeObjectURL(url);
         this.exporting.set(false);
       },
       error: () => this.exporting.set(false)
     });
+  }
+
+  continueFromEmergency() {
+    this.phase.set('running');
   }
 
   restart() {
@@ -128,6 +151,10 @@ export class SymptomChecker implements OnInit {
     this.results.set([]);
     this.answeredCount.set(0);
     this.errorMsg.set('');
+  }
+
+  goToAccount() {
+    this.router.navigate(['/account']);
   }
 
   dangerLabel(level: number): string {

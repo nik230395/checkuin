@@ -4,10 +4,9 @@
     @if (!selectedDisease()) {
       <div class="lexikon-header fade-in">
         <h1>Krankheitslexikon</h1>
-        <p>Wissenschaftlich fundierte Informationen zu häufigen Erkrankungen.</p>
-
+        <p>35 häufige Erkrankungen – ausführlich erklärt, medizinisch geprüft. Symptome, Ursachen, Behandlung und wann der Arztbesuch wirklich nötig ist.</p>
         <div class="lexikon-search glass">
-          <span class="search-icon">🔍</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input
             type="text"
             placeholder="Krankheit oder Symptom suchen…"
@@ -17,59 +16,207 @@
         </div>
       </div>
 
+      <!-- Kategorie-Filter-Chips -->
+      @if (categories().length > 0) {
+        <div class="category-filter">
+          <button
+            class="cat-chip"
+            [class.active]="selectedCategory() === null"
+            (click)="selectCategory(null)">
+            Alle
+          </button>
+          @for (cat of categories(); track cat) {
+            <button
+              class="cat-chip"
+              [class.active]="selectedCategory() === cat"
+              (click)="selectCategory(cat)">
+              {{ cat }}
+            </button>
+          }
+        </div>
+      }
+
       @if (loading()) {
         <div class="lexikon-loading">Lade Krankheiten…</div>
       } @else if (error()) {
         <div class="lexikon-error">{{ error() }}</div>
       } @else if (filteredDiseases().length === 0) {
-        <div class="lexikon-empty">Keine Ergebnisse für „{{ searchQuery() }}"</div>
+        <div class="lexikon-empty">
+          @if (selectedCategory()) {
+            Keine Einträge in „{{ selectedCategory() }}"
+          } @else {
+            Keine Ergebnisse für „{{ searchQuery() }}"
+          }
+        </div>
       } @else {
+        <div class="result-meta">
+          {{ filteredDiseases().length }} Einträge
+          @if (selectedCategory()) { <span class="result-cat">· {{ selectedCategory() }}</span> }
+        </div>
         <div class="lexikon-grid">
           @for (disease of filteredDiseases(); track disease.id) {
             <div class="disease-card glass" (click)="selectDisease(disease)">
-              <div class="d-icon">📖</div>
               <div class="d-content">
                 <h3>{{ disease.name }}</h3>
                 @if (disease.description) {
                   <p>{{ disease.description }}</p>
                 }
-                @if (disease.icdCode) {
-                  <span class="d-icd">ICD: {{ disease.icdCode }}</span>
-                }
+                <div class="d-footer">
+                  @if (disease.category) {
+                    <span class="d-category">{{ disease.category }}</span>
+                  }
+                  <span class="d-danger" [class]="'danger-' + disease.dangerLevel">{{ dangerLabel(disease.dangerLevel) }}</span>
+                </div>
               </div>
-              <span class="d-arrow">→</span>
+              <span class="d-arrow">&#8594;</span>
             </div>
           }
         </div>
       }
     }
 
+    <!-- ── DETAIL VIEW ─────────────────────────────────────────────────────── -->
     @if (selectedDisease()) {
       <div class="disease-detail fade-in">
-        <button class="btn-back" (click)="closeDetail()">← Zurück zum Lexikon</button>
-
-        <div class="detail-header">
-          @if (selectedDisease()!.icdCode) {
-            <span class="d-category">ICD: {{ selectedDisease()!.icdCode }}</span>
-          }
-          <h1>{{ selectedDisease()!.name }}</h1>
+        <div class="detail-topbar">
+          <button class="btn-back" (click)="closeDetail()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Zurück zum Lexikon
+          </button>
+          <a [routerLink]="['/vergleich']" [queryParams]="{ a: selectedDisease()!.id }" class="btn-compare-link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Mit anderer Krankheit vergleichen
+          </a>
         </div>
 
-        <div class="detail-grid">
-          <div class="detail-main glass">
-            <section>
-              <h4>Überblick</h4>
-              <p>{{ selectedDisease()!.description || 'Keine Beschreibung verfügbar.' }}</p>
-            </section>
-          </div>
+        @if (detailLoading()) {
+          <div class="lexikon-loading">Lade Details…</div>
+        } @else {
 
-          <div class="detail-sidebar">
-            <div class="sidebar-card glass">
-              <h4>Wann zum Arzt?</h4>
-              <p>Bei anhaltenden Beschwerden, plötzlicher Verschlechterung oder Unsicherheit immer einen Arzt aufsuchen.</p>
+          <!-- Hero Banner -->
+          <div class="detail-hero">
+            <div class="detail-hero-content">
+              <span class="detail-danger-pill" [class]="'danger-' + selectedDisease()!.dangerLevel">
+                {{ dangerLabel(selectedDisease()!.dangerLevel) }}
+              </span>
+              <h1>{{ selectedDisease()!.name }}</h1>
+              @if (selectedDisease()!.description) {
+                <p class="detail-lead">{{ selectedDisease()!.description }}</p>
+              }
+            </div>
+            <div class="detail-hero-mascot">
+              @if (diseaseIconUrl(selectedDisease()!.name); as iconUrl) {
+                <img [src]="iconUrl"
+                     [alt]="selectedDisease()!.name"
+                     class="disease-icon-img"
+                     (error)="$any($event.target).src='assets/dr_check.png'" />
+              } @else {
+                <img src="assets/dr_check.png" alt="Dr. Check" />
+              }
             </div>
           </div>
-        </div>
+
+          <!-- Section Grid -->
+          <div class="detail-sections">
+
+            @if (selectedDisease()!.overview) {
+              <div class="detail-section">
+                <div class="section-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div class="section-body">
+                  <h3>Überblick</h3>
+                  <p>{{ selectedDisease()!.overview }}</p>
+                </div>
+              </div>
+            }
+
+            @if (selectedDisease()!.symptoms) {
+              <div class="detail-section">
+                <div class="section-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <div class="section-body">
+                  <h3>Symptome</h3>
+                  <p>{{ selectedDisease()!.symptoms }}</p>
+                </div>
+              </div>
+            }
+
+            @if (selectedDisease()!.causes) {
+              <div class="detail-section">
+                <div class="section-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <div class="section-body">
+                  <h3>Ursachen</h3>
+                  <p>{{ selectedDisease()!.causes }}</p>
+                </div>
+              </div>
+            }
+
+            @if (selectedDisease()!.diagnosis) {
+              <div class="detail-section">
+                <div class="section-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+                </div>
+                <div class="section-body">
+                  <h3>Diagnose</h3>
+                  <p>{{ selectedDisease()!.diagnosis }}</p>
+                </div>
+              </div>
+            }
+
+            @if (selectedDisease()!.treatment) {
+              <div class="detail-section">
+                <div class="section-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                </div>
+                <div class="section-body">
+                  <h3>Behandlung</h3>
+                  <p>{{ selectedDisease()!.treatment }}</p>
+                </div>
+              </div>
+            }
+
+            @if (selectedDisease()!.progression) {
+              <div class="detail-section">
+                <div class="section-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <div class="section-body">
+                  <h3>Verlauf &amp; Prognose</h3>
+                  <p>{{ selectedDisease()!.progression }}</p>
+                </div>
+              </div>
+            }
+
+            @if (selectedDisease()!.whenToSeeDoctor) {
+              <div class="detail-section detail-section--warning">
+                <div class="section-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div class="section-body">
+                  <h3>Wann zum Arzt?</h3>
+                  <p>{{ selectedDisease()!.whenToSeeDoctor }}</p>
+                </div>
+              </div>
+            }
+
+            @if (selectedDisease()!.sources) {
+              <div class="detail-section detail-section--sources">
+                <div class="section-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </div>
+                <div class="section-body">
+                  <h3>Quellen</h3>
+                  <p>{{ selectedDisease()!.sources }}</p>
+                </div>
+              </div>
+            }
+
+          </div>
+        }
       </div>
     }
 

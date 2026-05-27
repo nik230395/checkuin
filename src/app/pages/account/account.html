@@ -1,0 +1,103 @@
+<div class="account-page">
+  <div class="container">
+
+    <div class="account-header fade-in">
+      <h1>Mein Account</h1>
+      @if (profile()) {
+        <p class="account-sub">{{ profile()!.username }} · {{ profile()!.email }}</p>
+      }
+    </div>
+
+    @if (successMsg()) {
+      <div class="msg-success">{{ successMsg() }}</div>
+    }
+    @if (errorMsg()) {
+      <div class="msg-error">{{ errorMsg() }}</div>
+    }
+
+    <!-- ── SESSION-VERLAUF ──────────────────────────────────────────────── -->
+    <section class="account-section fade-in">
+      <h2>Meine Anamnese-Sessions</h2>
+
+      @if (loading()) {
+        <div class="acc-loading">Lade Sessions…</div>
+      } @else if (sessions().length === 0) {
+        <div class="acc-empty glass">
+          <p>Noch keine Sessions vorhanden. <a routerLink="/symptom-Checker">Jetzt ersten Check starten</a></p>
+        </div>
+      } @else {
+        <div class="session-list">
+          @for (s of sessions(); track s.sessionId) {
+            <div class="session-card glass">
+              <div class="session-top">
+                <div class="session-meta">
+                  <span class="session-id">#{{ s.sessionId }}</span>
+                  <span class="session-date">{{ s.startedAt | date:'dd.MM.yyyy HH:mm' }}</span>
+                  <span class="session-status" [class]="statusClass(s.status)">
+                    {{ statusLabel(s.status) }}
+                  </span>
+                </div>
+                <span class="session-answers">{{ s.answeredCount }} Fragen beantwortet</span>
+              </div>
+
+              <!-- Diagnosen (wenn abgeschlossen) -->
+              @if (s.status === 'ABGESCHLOSSEN' && s.top3Results && s.top3Results.length > 0) {
+                <div class="session-results">
+                  @for (d of s.top3Results; track d.diseaseId) {
+                    <div class="result-chip">
+                      <span class="chip-name">{{ d.diseaseName }}</span>
+                      <span class="chip-prob">{{ percent(d.probability) }}</span>
+                      <span class="chip-danger">{{ dangerLabel(d.dangerLevel) }}</span>
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Aktionen -->
+              <div class="session-actions">
+                @if (s.status === 'PAUSIERT') {
+                  <button class="btn-resume"
+                          (click)="resumeSession(s)"
+                          [disabled]="resuming() === s.sessionId">
+                    @if (resuming() === s.sessionId) { Wird geladen… }
+                    @else { Fortsetzen }
+                  </button>
+                }
+                @if (s.status === 'ABGESCHLOSSEN') {
+                  <button class="btn-pdf"
+                          (click)="exportPdf(s.sessionId)"
+                          [disabled]="exportingId() === s.sessionId">
+                    @if (exportingId() === s.sessionId) { Erstelle PDF… }
+                    @else { PDF exportieren }
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- ── ACCOUNT-AKTIONEN ──────────────────────────────────────────────── -->
+    <section class="account-section fade-in">
+      <h2>Account-Verwaltung</h2>
+      <div class="account-actions glass">
+        <button class="btn-secondary" (click)="logout()">Abmelden</button>
+        <button class="btn-danger" (click)="confirmDelete()">Account löschen</button>
+      </div>
+
+      @if (showDeleteConfirm()) {
+        <div class="delete-confirm glass">
+          <p><strong>Bist du sicher?</strong> Dein Account und alle Anamnese-Daten werden unwiderruflich gelöscht (DSGVO-konform).</p>
+          <div class="confirm-actions">
+            <button class="btn-danger" (click)="deleteAccount()" [disabled]="deleting()">
+              @if (deleting()) { Wird gelöscht… } @else { Ja, Account löschen }
+            </button>
+            <button class="btn-secondary" (click)="cancelDelete()">Abbrechen</button>
+          </div>
+        </div>
+      }
+    </section>
+
+  </div>
+</div>

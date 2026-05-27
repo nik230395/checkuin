@@ -1,130 +1,184 @@
 .hero {
-    position: relative;
-    min-height: 85vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow: hidden;
-    padding-top: 100px;
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 100px;
+}
+
+/* Split layout: text left, mascot right */
+.hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
 }
 
 .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 800px;
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+  flex-shrink: 0;
+}
+
+/* Eyebrow label */
+.hero-eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-purple);
+  background: var(--purple-100);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 24px;
 }
 
 .hero h1 {
-    font-size: 72px;
-    line-height: 1.1;
-    font-weight: 800;
-    margin-bottom: 24px;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
+  font-family: var(--font-heading);
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: 0.01em;
+  margin-bottom: 22px;
+  color: var(--text-primary);
+}
+
+.hero h1 .accent {
+  color: var(--accent-purple);
 }
 
 .hero p {
-    font-size: 20px;
-    color: var(--text-secondary);
-    margin-bottom: 40px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  max-width: 460px;
+  line-height: 1.75;
 }
 
-/* Button-Styling (Falls btn-primary nicht global ist) */
 .hero-cta {
-    padding: 18px 40px;
-    font-size: 18px;
-    background-color: var(--accent-purple);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.2s;
+  display: inline-block;
+  padding: 16px 44px;
+  font-size: 16px;
+  font-family: var(--font-body);
+  background-color: var(--accent-purple);
+  color: white;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-purple);
 }
 
 .hero-cta:hover {
-    transform: scale(1.05);
+  background-color: var(--purple-700);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(124, 58, 237, 0.3);
 }
 
-/* Animations-Klassen (Ersatz für motion.div) */
-.fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
+/* Mascot side */
+.hero-mascot-wrap {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.fade-in-up-delay {
-    opacity: 0;
-    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+.hero-mascot-img {
+  width: 380px;
+  height: auto;
+  filter: drop-shadow(0 24px 48px rgba(124, 58, 237, 0.22));
 }
 
-.scale-in {
-    opacity: 0;
-    animation: scaleIn 0.5s ease-out 0.4s forwards;
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* Animated Blobs */
+/* Blobs */
 .hero-blobs {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    filter: blur(80px);
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  filter: blur(90px);
+  pointer-events: none;
 }
 
 .blob {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.6;
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.55;
 }
 
 .blob-1 {
-    width: 600px;
-    height: 600px;
-    background: var(--gradient-blob-1);
-    top: -100px;
-    right: -100px;
-    animation: moveBlob1 20s infinite alternate;
+  width: 560px;
+  height: 560px;
+  background: var(--gradient-blob-1);
+  top: -80px;
+  right: -80px;
 }
 
 .blob-2 {
-    width: 500px;
-    height: 500px;
-    background: var(--gradient-blob-2);
-    bottom: -50px;
-    left: -50px;
-    animation: moveBlob2 25s infinite alternate;
+  width: 460px;
+  height: 460px;
+  background: var(--gradient-blob-2);
+  bottom: -40px;
+  left: -60px;
 }
 
 .blob-3 {
-    width: 400px;
-    height: 400px;
-    background: rgba(171, 159, 242, 0.2);
-    top: 50%;
-    left: 40%;
-    animation: moveBlob3 15s infinite alternate;
+  width: 380px;
+  height: 380px;
+  background: rgba(139, 92, 246, 0.12);
+  top: 45%;
+  left: 38%;
 }
 
-/* Keyframes für die Blobs */
-@keyframes moveBlob1 { from { transform: translate(0, 0); } to { transform: translate(-100px, 100px); } }
-@keyframes moveBlob2 { from { transform: translate(0, 0); } to { transform: translate(100px, -50px); } }
-@keyframes moveBlob3 { from { transform: translate(0, 0); } to { transform: translate(-50px, -100px); } }
+/* Animations */
+.fade-in-up {
+  animation: fadeInUp 0.7s ease-out forwards;
+}
 
-@media (max-width: 768px) {
-    .hero h1 { font-size: 48px; }
-    .hero p { font-size: 18px; }
+.fade-in-up-delay {
+  opacity: 0;
+  animation: fadeInUp 0.7s ease-out 0.2s forwards;
+}
+
+.scale-in {
+  opacity: 0;
+  animation: scaleIn 0.5s ease-out 0.35s forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 968px) {
+  .hero {
+    min-height: auto;
+    padding: 120px 0 60px;
+  }
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero-content { max-width: 100%; }
+  .hero h1 { font-size: 52px; }
+  .hero p { max-width: 100%; margin-left: auto; margin-right: auto; }
+  .hero-mascot-img { width: 260px; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 40px; }
+  .hero-mascot-img { width: 200px; }
 }

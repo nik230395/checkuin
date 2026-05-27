@@ -1,0 +1,112 @@
+<div class="legal-page">
+  <div class="container">
+
+    <div class="legal-header fade-in">
+      <a routerLink="/" class="btn-back">← Zurück</a>
+      <h1>Datenschutzerklärung</h1>
+      <p class="legal-sub">Gemäß DSGVO (EU) 2016/679 und DSG 2018</p>
+    </div>
+
+    <div class="legal-body fade-in">
+
+      <div class="legal-section glass">
+        <h2>1. Verantwortliche Stelle</h2>
+        <p>
+          Verantwortlich für die Verarbeitung personenbezogener Daten ist das
+          Entwicklungsteam von Checkuin im Rahmen des Schulprojekts an der
+          HTL Spengergasse, Wien.<br>
+          Kontakt: <a href="mailto:naleksandar2008@gmail.com">naleksandar2008&#64;gmail.com</a>
+        </p>
+      </div>
+
+      <div class="legal-section glass">
+        <h2>2. Erhobene Daten</h2>
+        <p>
+          Bei der Registrierung und Nutzung von Checkuin werden folgende Daten erhoben:
+        </p>
+        <ul>
+          <li>Benutzername und E-Mail-Adresse (Registrierung)</li>
+          <li>Passworte (verschlüsselt gespeichert, BCrypt)</li>
+          <li>Symptome und Antworten aus dem Symptom-Check (Anamnese-Daten)</li>
+          <li>Ergebnisse der Diagnoseanalyse</li>
+          <li>Zeitstempel der Sitzungen</li>
+        </ul>
+      </div>
+
+      <div class="legal-section glass">
+        <h2>3. Zweck der Datenverarbeitung</h2>
+        <p>
+          Die erhobenen Daten werden ausschließlich für folgende Zwecke verwendet:
+        </p>
+        <ul>
+          <li>Bereitstellung der Symptomanalyse-Funktion</li>
+          <li>Speicherung und Abruf der Anamnese-Historie</li>
+          <li>Authentifizierung und Sicherheit des Nutzerkontos</li>
+          <li>PDF-Export der Analyseergebnisse</li>
+        </ul>
+        <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung)</p>
+      </div>
+
+      <div class="legal-section glass">
+        <h2>4. Datenweitergabe</h2>
+        <p>
+          Ihre Daten werden <strong>nicht</strong> an Dritte weitergegeben oder verkauft.
+          Die Verarbeitung erfolgt ausschließlich auf lokalen Servern im Rahmen des
+          Schulprojekts. Es findet keine Übermittlung in Drittländer statt.
+        </p>
+      </div>
+
+      <div class="legal-section glass">
+        <h2>5. Speicherdauer</h2>
+        <p>
+          Personenbezogene Daten werden gespeichert, solange das Nutzerkonto aktiv ist.
+          Nach Löschung des Accounts werden alle zugehörigen Anamnese-Daten
+          unwiderruflich und DSGVO-konform entfernt.
+        </p>
+      </div>
+
+      <div class="legal-section glass">
+        <h2>6. Ihre Rechte</h2>
+        <p>Sie haben das Recht auf:</p>
+        <ul>
+          <li><strong>Auskunft</strong> über Ihre gespeicherten Daten (Art. 15 DSGVO)</li>
+          <li><strong>Berichtigung</strong> unrichtiger Daten (Art. 16 DSGVO)</li>
+          <li><strong>Löschung</strong> Ihrer Daten (Art. 17 DSGVO) — direkt über „Account löschen"</li>
+          <li><strong>Einschränkung</strong> der Verarbeitung (Art. 18 DSGVO)</li>
+          <li><strong>Datenübertragbarkeit</strong> (Art. 20 DSGVO)</li>
+          <li><strong>Widerspruch</strong> gegen die Verarbeitung (Art. 21 DSGVO)</li>
+        </ul>
+        <p>Zur Ausübung Ihrer Rechte: <a href="mailto:naleksandar2008@gmail.com">naleksandar2008&#64;gmail.com</a></p>
+      </div>
+
+      <div class="legal-section glass">
+        <h2>7. Sicherheit</h2>
+        <p>
+          Passwörter werden mit BCrypt gehasht. Die Kommunikation zwischen Client
+          und Server erfolgt über JWT-Token (HS256). Sitzungsdaten sind nur für den
+          eingeloggten Nutzer zugänglich.
+        </p>
+      </div>
+
+      <div class="legal-section glass">
+        <h2>8. Cookies & Lokaler Speicher</h2>
+        <p>
+          Checkuin verwendet keine Tracking-Cookies. Zur Authentifizierung wird
+          ein JWT-Token im <code>localStorage</code> des Browsers gespeichert.
+          Dieser Token wird bei der Abmeldung gelöscht.
+        </p>
+      </div>
+
+      <div class="legal-section glass">
+        <h2>9. Beschwerderecht</h2>
+        <p>
+          Sie haben das Recht, sich bei der österreichischen Datenschutzbehörde
+          zu beschweren:<br>
+          Datenschutzbehörde, Barichgasse 40–42, 1030 Wien<br>
+          <a href="https://www.dsb.gv.at" target="_blank" rel="noopener">www.dsb.gv.at</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

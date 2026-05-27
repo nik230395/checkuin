@@ -1,150 +1,143 @@
 .about-container {
-    padding: 160px 20px 100px;
-    max-width: 1200px;
-    margin: 0 auto;
-    background: radial-gradient(circle at top right, rgba(171, 159, 242, 0.08) 0%, transparent 40%);
+  padding: 160px 20px 100px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Header Bereich */
+/* Header */
 .about-header {
-    text-align: center;
-    margin-bottom: 80px;
+  text-align: center;
+  margin-bottom: 80px;
 }
 
 .about-header h1 {
-    font-size: 56px;
-    font-weight: 800;
-    margin-bottom: 24px;
-    letter-spacing: -0.03em;
-    color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 56px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
 }
 
 .about-header .lead {
-    font-size: 20px;
-    color: var(--text-secondary);
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.6;
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
 }
 
 /* Team Grid */
 .team-section h2 {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 48px;
-    text-align: center;
+  font-family: var(--font-heading);
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 44px;
+  text-align: center;
+  color: var(--text-primary);
 }
 
 .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 32px;
-    margin-bottom: 100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+  margin-bottom: 100px;
 }
 
 /* Team Cards */
 .team-card {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 32px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .team-card:hover {
-    transform: translateY(-12px);
-    background: white;
-    box-shadow: 0 20px 40px rgba(171, 159, 242, 0.15);
-    border-color: var(--accent-purple);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-purple);
 }
 
 .image-placeholder {
-    width: 100%;
-    height: 320px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
-    overflow: hidden;
-    display: flex;
-    justify-content: center; /* Horizontal zentrieren */
-    align-items: center;     /* Vertikal zentrieren */
-    
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(135deg, var(--slate-100) 0%, var(--purple-100) 100%);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .image-placeholder img {
-    width: 80%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-    
+  width: 80%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
 .team-card:hover img {
-    transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .card-content {
-    padding: 32px;
+  padding: 28px 30px;
 }
 
 .card-content h3 {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-primary);
 }
 
 .role {
-    color: var(--accent-purple);
-    font-weight: 600;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-    display: block;
+  color: var(--accent-purple);
+  font-weight: 600;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 12px;
+  display: block;
 }
 
 .card-content p:not(.role) {
-    font-size: 16px;
-    color: var(--text-secondary);
-    line-height: 1.5;
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
-/* Vision Sektion */
+/* Mission */
 .mission-statement {
-    text-align: center;
-    padding: 80px 40px;
-    background: linear-gradient(135deg, rgba(171, 159, 242, 0.1) 0%, rgba(255, 158, 111, 0.1) 100%);
-    border-radius: 40px;
-    margin-top: 60px;
+  text-align: center;
+  padding: 72px 40px;
+  background: var(--purple-50);
+  border: 1px solid var(--purple-200);
+  border-radius: var(--radius-xl);
+  margin-top: 60px;
 }
 
 .mission-statement h2 {
-    font-size: 32px;
-    margin-bottom: 24px;
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text-primary);
 }
 
 .mission-statement p {
-    font-size: 22px;
-    max-width: 900px;
-    margin: 0 auto;
-    font-weight: 500;
-    color: var(--text-primary);
-    line-height: 1.5;
+  font-size: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.6;
 }
 
-/* Responsive Anpassungen */
 @media (max-width: 768px) {
-    .about-header h1 {
-        font-size: 40px;
-    }
-    
-    .team-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .mission-statement p {
-        font-size: 18px;
-    }
+  .about-header h1 { font-size: 40px; }
+  .team-grid { grid-template-columns: 1fr; }
+  .mission-statement p { font-size: 17px; }
 }

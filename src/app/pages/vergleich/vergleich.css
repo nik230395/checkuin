@@ -1,0 +1,338 @@
+.vergleich-page {
+  padding: 140px 0 100px;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 0%, var(--purple-50) 0%, transparent 50%);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────────── */
+
+.vergleich-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 48px;
+}
+
+.vergleich-header h1 {
+  font-family: var(--font-heading);
+  font-size: 46px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.vergleich-header p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: 24px;
+  transition: color 0.15s;
+}
+.btn-back:hover { color: var(--accent-purple); }
+
+/* ── Selector Row ─────────────────────────────────────────────────────────────── */
+
+.selector-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 28px 32px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.selector-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+  max-width: 320px;
+}
+
+.selector-col label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.disease-select {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid rgba(118,118,128,0.2);
+  background: rgba(255,255,255,0.8);
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.disease-select:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+}
+
+.vs-badge {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.btn-compare {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 24px;
+  background: var(--accent-purple);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+.btn-compare:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+.btn-compare:disabled { opacity: 0.38; cursor: not-allowed; }
+
+/* ── Disease Headers ──────────────────────────────────────────────────────────── */
+
+.disease-headers {
+  display: grid;
+  grid-template-columns: 1fr 48px 1fr;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.dh {
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dh-a { border-top: 3px solid var(--accent-purple); }
+.dh-b { border-top: 3px solid #0ea5e9; }
+
+.dh-name {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dh-cat {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(139,92,246,0.08);
+  color: var(--accent-purple);
+  border: 1px solid rgba(139,92,246,0.15);
+  display: inline-block;
+  width: fit-content;
+}
+
+.dh-vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.dh-danger {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+  width: fit-content;
+}
+.danger-1 { background: rgba(34,197,94,.1);  color: #15803d; }
+.danger-2 { background: rgba(234,179,8,.12); color: #92400e; }
+.danger-3 { background: rgba(239,68,68,.1);  color: #b91c1c; }
+
+/* ── Diff Table ───────────────────────────────────────────────────────────────── */
+
+.diff-section {
+  padding: 28px 32px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+}
+
+.diff-section h2 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.diff-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.diff-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diff-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 52px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.diff-head {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-secondary);
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.diff-symptom {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+/* Bar columns */
+.diff-bar-col {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bar-a-col { flex-direction: row-reverse; } /* A-Bars wachsen von rechts zur Mitte */
+.bar-b-col { flex-direction: row; }         /* B-Bars wachsen von Mitte nach rechts */
+
+.text-a { text-align: right; }
+.text-b { text-align: left; }
+
+.prob-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.bar-fill-a {
+  height: 100%;
+  background: var(--accent-purple);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.bar-fill-b {
+  height: 100%;
+  background: #0ea5e9;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* Delta badge */
+.diff-delta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.delta-value {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(0,0,0,0.06);
+  color: var(--text-secondary);
+  min-width: 28px;
+  text-align: center;
+}
+
+/* Highlight rows with high delta */
+.diff-row.favors-a .bar-fill-a,
+.diff-row.favors-b .bar-fill-b {
+  filter: brightness(1.05);
+}
+
+.diff-row:not(.diff-head) {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.diff-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 32px;
+  font-size: 14px;
+}
+
+/* ── States + Disclaimer ──────────────────────────────────────────────────────── */
+
+.vergleich-loading {
+  text-align: center;
+  padding: 48px;
+  color: var(--text-secondary);
+}
+
+.vergleich-error {
+  text-align: center;
+  padding: 32px;
+  color: #c0392b;
+}
+
+.disclaimer {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .selector-row { flex-direction: column; align-items: stretch; }
+  .vs-badge { text-align: center; padding: 0; }
+  .disease-headers { grid-template-columns: 1fr; }
+  .dh-vs { display: none; }
+  .diff-row { grid-template-columns: 140px 1fr 40px 1fr; gap: 6px; }
+  .diff-symptom { font-size: 12px; }
+}

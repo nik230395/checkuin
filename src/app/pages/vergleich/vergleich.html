@@ -1,0 +1,136 @@
+<div class="vergleich-page">
+  <div class="container">
+
+    <div class="vergleich-header fade-in">
+      <a routerLink="/lexikon" class="btn-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Zurück zum Lexikon
+      </a>
+      <h1>Krankheiten vergleichen</h1>
+      <p>Wähle zwei Erkrankungen – das System zeigt dir welche Symptome am stärksten unterscheiden.</p>
+    </div>
+
+    <!-- Auswahl-Panel -->
+    <div class="selector-row glass fade-in">
+      <div class="selector-col">
+        <label>Krankheit A</label>
+        <select (change)="selectA($any($event.target).value)" class="disease-select">
+          <option value="">Bitte wählen…</option>
+          @for (d of diseases(); track d.id) {
+            <option [value]="d.id" [selected]="selectedA()?.id === d.id">{{ d.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="vs-badge">VS</div>
+
+      <div class="selector-col">
+        <label>Krankheit B</label>
+        <select (change)="selectB($any($event.target).value)" class="disease-select">
+          <option value="">Bitte wählen…</option>
+          @for (d of diseases(); track d.id) {
+            <option [value]="d.id" [selected]="selectedB()?.id === d.id">{{ d.name }}</option>
+          }
+        </select>
+      </div>
+
+      <button class="btn-compare" [disabled]="!canCompare()" (click)="compare()">
+        Vergleichen
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <!-- Loading -->
+    @if (loading()) {
+      <div class="vergleich-loading">Analyse läuft…</div>
+    }
+
+    <!-- Error -->
+    @if (error()) {
+      <div class="vergleich-error">{{ error() }}</div>
+    }
+
+    <!-- Ergebnis -->
+    @if (comparison(); as cmp) {
+      <div class="comparison-result fade-in">
+
+        <!-- Header: Krankheit A vs B -->
+        <div class="disease-headers">
+          <div class="dh dh-a glass">
+            <div class="dh-name">{{ cmp.diseaseAName }}</div>
+            @if (cmp.diseaseACategory) {
+              <span class="dh-cat">{{ cmp.diseaseACategory }}</span>
+            }
+            <span class="dh-danger" [class]="'danger-' + cmp.diseaseADangerLevel">{{ dangerLabel(cmp.diseaseADangerLevel) }}</span>
+          </div>
+
+          <div class="dh-vs">
+            <span>VS</span>
+          </div>
+
+          <div class="dh dh-b glass">
+            <div class="dh-name">{{ cmp.diseaseBName }}</div>
+            @if (cmp.diseaseBCategory) {
+              <span class="dh-cat">{{ cmp.diseaseBCategory }}</span>
+            }
+            <span class="dh-danger" [class]="'danger-' + cmp.diseaseBDangerLevel">{{ dangerLabel(cmp.diseaseBDangerLevel) }}</span>
+          </div>
+        </div>
+
+        <!-- Differenziatoren-Tabelle -->
+        <div class="diff-section glass">
+          <h2>Trennschärfste Symptome</h2>
+          <p class="diff-sub">Sortiert nach diagnostischem Trennwert — je größer das Delta, desto zuverlässiger unterscheidet dieses Symptom die beiden Erkrankungen.</p>
+
+          <div class="diff-table">
+            <!-- Spalten-Header -->
+            <div class="diff-row diff-head">
+              <div class="diff-symptom">Symptom</div>
+              <div class="diff-bar-col text-a">{{ cmp.diseaseAName }}</div>
+              <div class="diff-delta">Δ</div>
+              <div class="diff-bar-col text-b">{{ cmp.diseaseBName }}</div>
+            </div>
+
+            @for (diff of cmp.differentiators; track diff.symptomId) {
+              <div class="diff-row" [class.favors-a]="diff.favorsA" [class.favors-b]="!diff.favorsA">
+                <!-- Symptom-Name -->
+                <div class="diff-symptom">{{ diff.symptomName }}</div>
+
+                <!-- Bar A (rechtsbündig) -->
+                <div class="diff-bar-col bar-a-col">
+                  <span class="prob-label">{{ (diff.probA * 100).toFixed(0) }}%</span>
+                  <div class="bar-track bar-track-a">
+                    <div class="bar-fill bar-fill-a" [style.width]="barWidth(diff.probA)"></div>
+                  </div>
+                </div>
+
+                <!-- Delta -->
+                <div class="diff-delta">
+                  <span class="delta-value">{{ (diff.delta * 100).toFixed(0) }}</span>
+                </div>
+
+                <!-- Bar B (linksbündig) -->
+                <div class="diff-bar-col bar-b-col">
+                  <div class="bar-track bar-track-b">
+                    <div class="bar-fill bar-fill-b" [style.width]="barWidth(diff.probB)"></div>
+                  </div>
+                  <span class="prob-label">{{ (diff.probB * 100).toFixed(0) }}%</span>
+                </div>
+              </div>
+            }
+          </div>
+
+          @if (cmp.differentiators.length === 0) {
+            <div class="diff-empty">Keine signifikanten Unterschiede in den Symptom-Wahrscheinlichkeiten gefunden.</div>
+          }
+        </div>
+
+        <!-- Hinweis -->
+        <p class="disclaimer">
+          Die Wahrscheinlichkeiten basieren auf epidemiologischen Daten (WHO/RKI) und dienen nur zur Orientierung. Kein Ersatz für ärztliche Diagnose.
+        </p>
+      </div>
+    }
+
+  </div>
+</div>

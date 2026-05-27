@@ -1,0 +1,112 @@
+/* Datenschutz shares the same styles as Impressum */
+.legal-page {
+  min-height: 100vh;
+  padding: 100px 20px 80px;
+  background: radial-gradient(circle at top, var(--purple-50) 0%, white 60%);
+  font-family: var(--font-body);
+}
+
+.legal-header {
+  margin-bottom: 36px;
+}
+
+.btn-back {
+  display: inline-block;
+  color: var(--accent-purple);
+  font-weight: 600;
+  font-size: 13.5px;
+  text-decoration: none;
+  margin-bottom: 18px;
+  transition: color 0.18s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.btn-back:hover { color: var(--purple-700); }
+
+.legal-header h1 {
+  font-family: var(--font-heading);
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.legal-sub {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.legal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.legal-section {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 26px 30px;
+  transition: box-shadow 0.2s;
+}
+
+.legal-section:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.legal-section h2 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.legal-section p {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin: 0 0 8px;
+}
+
+.legal-section p:last-child { margin-bottom: 0; }
+
+.legal-section ul {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.legal-section a {
+  color: var(--accent-purple);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+
+.legal-section a:hover { color: var(--purple-700); }
+
+.legal-section code {
+  background: var(--purple-50);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 13px;
+  color: var(--accent-purple);
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

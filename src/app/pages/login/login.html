@@ -1,20 +1,15 @@
 <div class="login-wrapper">
   <div class="login-card shadow-lg">
     <div class="login-header">
-      <h2>Willkommen bei CheckuIn</h2>
+      <img src="assets/dr_check_transparent.png" alt="Dr. Check" class="login-mascot" />
+      <h2>Willkommen bei Checkuin</h2>
     </div>
 
     <div class="auth-tabs">
-      <button
-        [class.active]="isLoginMode()"
-        (click)="isLoginMode.set(true); error.set(''); successMsg.set(''); unverifiedUsername.set('')"
-        class="tab-btn">
+      <button [class.active]="mode() === 'login'" (click)="setMode('login')" class="tab-btn">
         Anmelden
       </button>
-      <button
-        [class.active]="!isLoginMode()"
-        (click)="isLoginMode.set(false); error.set(''); successMsg.set(''); unverifiedUsername.set('')"
-        class="tab-btn">
+      <button [class.active]="mode() === 'register'" (click)="setMode('register')" class="tab-btn">
         Registrieren
       </button>
     </div>
@@ -34,40 +29,69 @@
       <div class="auth-success">{{ successMsg() }}</div>
     }
 
-    <form (submit)="$event.preventDefault(); onSubmit(loginInput.value, pwInput.value, nameInput.value)" class="login-form">
+    <!-- ── LOGIN / REGISTER FORM ─────────────────────────────────────── -->
+    @if (mode() !== 'forgot') {
+      <form (submit)="$event.preventDefault(); onSubmit(loginInput.value, pwInput.value, nameInput.value)" class="login-form">
 
-      <!-- Name field: always in DOM, hidden for login -->
-      <div class="input-field" [style.display]="isLoginMode() ? 'none' : 'block'">
-        <label for="name">Vollständiger Name</label>
-        <input #nameInput type="text" id="name" name="name" placeholder="Max Mustermann">
-      </div>
-
-      <div class="input-field">
-        <label for="loginInput">{{ isLoginMode() ? 'E-Mail oder Benutzername' : 'E-Mail-Adresse' }}</label>
-        <input #loginInput type="text" id="loginInput" name="loginInput"
-               [placeholder]="isLoginMode() ? 'name@example.com oder username' : 'name@example.com'"
-               required>
-      </div>
-
-      <div class="input-field">
-        <label for="password">Passwort</label>
-        <div class="password-wrapper">
-          <input #pwInput type="password" id="password" name="password"
-                 [placeholder]="isLoginMode() ? 'Passwort' : 'Mind. 8 Zeichen'"
-                 required>
-          <span class="eye-icon">👁️</span>
+        <!-- Name field: only for register -->
+        <div class="input-field" [style.display]="mode() === 'register' ? 'block' : 'none'">
+          <label for="name">Benutzername</label>
+          <input #nameInput type="text" id="name" name="name" placeholder="max_mustermann">
         </div>
-      </div>
 
-      <div class="form-footer">
-        <button type="submit" class="btn-primary" [disabled]="loading()">
-          @if (loading()) {
-            Laden…
-          } @else {
-            {{ isLoginMode() ? 'Anmelden' : 'Registrieren' }}
+        <div class="input-field">
+          <label for="loginInput">{{ mode() === 'login' ? 'E-Mail oder Benutzername' : 'E-Mail-Adresse' }}</label>
+          <input #loginInput type="text" id="loginInput" name="loginInput"
+                 [placeholder]="mode() === 'login' ? 'name@example.com oder username' : 'name@example.com'"
+                 required>
+        </div>
+
+        <div class="input-field">
+          <label for="password">Passwort</label>
+          <div class="password-wrapper">
+            <input #pwInput type="password" id="password" name="password"
+                   [placeholder]="mode() === 'login' ? 'Passwort' : 'Mind. 8 Zeichen'"
+                   required>
+            <span class="eye-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <button type="submit" class="btn-primary" [disabled]="loading()">
+            @if (loading()) { Laden… } @else { {{ mode() === 'login' ? 'Anmelden' : 'Registrieren' }} }
+          </button>
+          @if (mode() === 'login') {
+            <button type="button" class="btn-forgot" (click)="setMode('forgot')">
+              Passwort vergessen?
+            </button>
           }
-        </button>
+        </div>
+      </form>
+    }
+
+    <!-- ── FORGOT PASSWORD FORM ───────────────────────────────────────── -->
+    @if (mode() === 'forgot') {
+      <div class="forgot-header">
+        <h3>Passwort zurücksetzen</h3>
+        <p>Gib deine E-Mail ein – wir schicken dir einen Reset-Link.</p>
       </div>
-    </form>
+      <form (submit)="$event.preventDefault(); forgotPassword(forgotEmail.value)" class="login-form">
+        <div class="input-field">
+          <label for="forgotEmail">E-Mail-Adresse</label>
+          <input #forgotEmail type="email" id="forgotEmail" name="forgotEmail"
+                 placeholder="name@example.com" required>
+        </div>
+        <div class="form-footer">
+          <button type="submit" class="btn-primary" [disabled]="loading()">
+            @if (loading()) { Senden… } @else { Reset-Link senden }
+          </button>
+          <button type="button" class="btn-forgot" (click)="setMode('login')">
+            Zurück zum Anmelden
+          </button>
+        </div>
+      </form>
+    }
   </div>
 </div>

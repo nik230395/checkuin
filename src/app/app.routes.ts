@@ -7,6 +7,11 @@ import { Lexikon } from './pages/lexikon/lexikon';
 import { Team } from './pages/team/team';
 import { SymptomChecker } from './pages/symptom-checker/symptom-checker';
 import { Login } from './pages/login/login';
+import { Account } from './pages/account/account';
+import { Impressum } from './pages/impressum/impressum';
+import { Datenschutz } from './pages/datenschutz/datenschutz';
+import { Vergleich } from './pages/vergleich/vergleich';
+import { ResetPassword } from './pages/reset-password/reset-password';
 import { AuthService } from './services/auth.service';
 
 const authGuard = () => {
@@ -24,5 +29,10 @@ export const routes: Routes = [
   { path: 'lexikon', component: Lexikon },
   { path: 'team', component: Team },
   { path: 'symptom-Checker', component: SymptomChecker, canActivate: [authGuard] },
+  { path: 'account', component: Account, canActivate: [authGuard] },
+  { path: 'impressum', component: Impressum },
+  { path: 'datenschutz', component: Datenschutz },
+  { path: 'vergleich', component: Vergleich },
+  { path: 'reset-password', component: ResetPassword },
   { path: '**', redirectTo: '' }
 ];
