@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://checkuin-backend-production.up.railway.app/api'
+  apiUrl: 'https://checkuin-backend.onrender.com/api'
 };
