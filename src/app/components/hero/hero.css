@@ -83,6 +83,15 @@
   box-shadow: 0 12px 32px rgba(124, 58, 237, 0.3);
 }
 
+.hero-disclaimer {
+  margin-top: 16px;
+  margin-bottom: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
 /* Mascot side */
 .hero-mascot-wrap {
   position: relative;

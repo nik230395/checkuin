@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: checkuin
+    env: static
+    buildCommand: npm run build
+    staticPublishPath: dist/frontend_Checkuin/browser
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
