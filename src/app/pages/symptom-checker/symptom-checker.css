@@ -580,3 +580,62 @@
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .checker-page {
+    padding: 70px 16px 48px;
+  }
+
+  .checker-start h1 {
+    font-size: 36px;
+  }
+
+  .checker-start-mascot {
+    height: 160px;
+  }
+
+  .checker-start p {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  .checker-start-btn {
+    padding: 14px 36px;
+    font-size: 15px;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .question-card {
+    padding: 28px 20px;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+  }
+
+  .answer-buttons {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checker-start h1 {
+    font-size: 28px;
+  }
+
+  .checker-start-mascot {
+    height: 130px;
+  }
+
+  .question-card {
+    padding: 22px 16px;
+    border-radius: var(--radius-lg);
+  }
+
+  .checker-start {
+    padding: 40px 0 20px;
+  }
+}

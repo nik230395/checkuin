@@ -246,3 +246,42 @@
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .login-wrapper {
+    padding: 12px;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .login-header {
+    padding: 20px 16px 8px;
+  }
+
+  .login-header h2 {
+    font-size: 24px;
+  }
+
+  .login-mascot {
+    height: 56px;
+  }
+
+  .auth-tabs {
+    margin: 0 16px 16px;
+  }
+
+  .login-form {
+    padding: 0 16px 20px;
+  }
+
+  .auth-error,
+  .auth-success {
+    margin: 0 16px 12px;
+  }
+
+  .forgot-header {
+    padding: 0 16px 4px;
+  }
+}
