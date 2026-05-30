@@ -128,7 +128,8 @@
   }
 
   .feature-card {
-    flex: 0 0 82%;
+    flex: 0 0 320px;
+    width: 320px;
     scroll-snap-align: start;
   }
 }
