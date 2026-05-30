@@ -15,7 +15,7 @@
 .lexikon-header h1 {
   font-family: var(--font-heading);
   font-size: 52px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.01em;
   margin-bottom: 16px;
   color: var(--text-primary);

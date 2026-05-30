@@ -15,7 +15,7 @@
 .vergleich-header h1 {
   font-family: var(--font-heading);
   font-size: 46px;
-  font-weight: 500;
+  font-weight: 400;
   margin-bottom: 12px;
   color: var(--text-primary);
 }
@@ -88,7 +88,7 @@
 .vs-badge {
   font-family: var(--font-heading);
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--text-secondary);
   padding-bottom: 10px;
   flex-shrink: 0;
@@ -159,7 +159,7 @@
   justify-content: center;
   font-family: var(--font-heading);
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--text-secondary);
 }
 

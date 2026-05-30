@@ -13,7 +13,7 @@
 .about-header h1 {
   font-family: var(--font-heading);
   font-size: 56px;
-  font-weight: 500;
+  font-weight: 400;
   margin-bottom: 20px;
   letter-spacing: 0.01em;
   color: var(--text-primary);
@@ -31,7 +31,7 @@
 .team-section h2 {
   font-family: var(--font-heading);
   font-size: 34px;
-  font-weight: 500;
+  font-weight: 400;
   margin-bottom: 44px;
   text-align: center;
   color: var(--text-primary);
@@ -122,7 +122,7 @@
 .mission-statement h2 {
   font-family: var(--font-heading);
   font-size: 32px;
-  font-weight: 500;
+  font-weight: 400;
   margin-bottom: 20px;
   color: var(--text-primary);
 }
