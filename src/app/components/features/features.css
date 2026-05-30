@@ -118,8 +118,8 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
-    padding: 0 24px 16px;
-    /* hide scrollbar but keep scroll */
+    /* padding links+rechts = halbe Lücke damit erste/letzte Card zentriert */
+    padding: 0 0 16px;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -128,8 +128,16 @@
   }
 
   .feature-card {
-    flex: 0 0 calc(100vw - 64px);
-    width: calc(100vw - 64px);
-    scroll-snap-align: start;
+    flex: 0 0 calc(100vw - 48px);
+    width: calc(100vw - 48px);
+    scroll-snap-align: center;
+  }
+
+  /* Offset für erste und letzte Card damit sie zentriert starten */
+  .feature-card:first-child {
+    margin-left: 24px;
+  }
+  .feature-card:last-child {
+    margin-right: 24px;
   }
 }
