@@ -26,7 +26,7 @@
 .checker-start h1 {
   font-family: var(--font-heading);
   font-size: 52px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.01em;
   color: var(--text-primary);
   margin-bottom: 16px;
@@ -186,7 +186,7 @@
 .emergency-number {
   font-family: var(--font-heading);
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 500;
   color: #e74c3c;
   margin: 24px 0 8px;
   letter-spacing: 0.02em;
@@ -285,7 +285,7 @@
 .checker-emergency h2 {
   font-family: var(--font-heading);
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 500;
   color: #e74c3c;
   margin-bottom: 16px;
 }
@@ -314,7 +314,7 @@
 .checker-result h2 {
   font-family: var(--font-heading);
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-primary);
   margin-bottom: 8px;
 }
@@ -505,7 +505,7 @@
 .checker-error-page h2 {
   font-family: var(--font-heading);
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-primary);
   margin-bottom: 12px;
 }

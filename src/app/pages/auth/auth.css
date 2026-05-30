@@ -27,7 +27,7 @@
 .auth-header h2 {
   font-family: var(--font-heading);
   font-size: 34px;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 10px;
   letter-spacing: 0.01em;
   color: var(--text-primary);
@@ -132,7 +132,7 @@
   height: 66px;
   text-align: center;
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 500;
   font-family: var(--font-heading);
   border-radius: var(--radius-md);
   background: var(--slate-50);
