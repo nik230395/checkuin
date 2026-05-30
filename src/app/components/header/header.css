@@ -189,6 +189,105 @@
   background-color: var(--slate-100);
 }
 
+/* ── Hamburger Button ──────────────────────────────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: background 0.18s;
+}
+.hamburger:hover { background: rgba(0,0,0,0.05); }
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
+}
+
+/* X animation when open */
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile Dropdown ───────────────────────────────────────────────────────── */
+.mobile-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 4%;
+  right: 4%;
+  border-radius: var(--radius-lg);
+  padding: 12px 8px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 999;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+.mobile-menu.visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+}
+.mobile-nav-links li a {
+  display: block;
+  padding: 13px 16px;
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  font-family: var(--font-body);
+}
+.mobile-nav-links li a:hover,
+.mobile-nav-links li a.active-link {
+  background: var(--purple-100);
+  color: var(--accent-purple);
+}
+
+.mobile-menu-footer {
+  display: flex;
+  gap: 8px;
+  padding: 8px 8px 4px;
+  border-top: 1px solid var(--border-color);
+  align-items: center;
+}
+.mobile-account-link {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  transition: color 0.15s;
+}
+.mobile-account-link:hover { color: var(--accent-purple); }
+
+/* ── Responsive breakpoints ────────────────────────────────────────────────── */
 @media (max-width: 968px) {
   .header-center { display: none; }
+  .header-right  { display: none; }
+  .hamburger     { display: flex; }
 }

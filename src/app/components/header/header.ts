@@ -13,20 +13,23 @@ import { AuthService } from '../../services/auth.service';
 export class Header {
   auth = inject(AuthService);
   isScrolled = false;
+  menuOpen = false;
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.isScrolled = window.scrollY > 20;
   }
 
-  scrollTo(sectionId: string) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
   }
 
   logout() {
     this.auth.logout();
+    this.closeMenu();
   }
 }

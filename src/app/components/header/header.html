@@ -1,7 +1,7 @@
 <header class="header-container" [class.scrolled]="isScrolled">
     <nav class="header-nav glass">
         <div class="header-left">
-            <a routerLink="/" class="logo">
+            <a routerLink="/" class="logo" (click)="closeMenu()">
                 <img src="assets/dr_check.png" class="nav-mascot" alt="Dr. Check" />
                 <span class="logo-text">Checkuin</span>
             </a>
@@ -24,5 +24,30 @@
                 <a routerLink="/login" class="btn-primary download-btn">Login</a>
             }
         </div>
+
+        <!-- Hamburger Button (nur mobile) -->
+        <button class="hamburger" (click)="toggleMenu()" [class.open]="menuOpen" aria-label="Menü">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <!-- Mobile Dropdown -->
+    <div class="mobile-menu glass" [class.visible]="menuOpen">
+        <ul class="mobile-nav-links">
+            <li><a routerLink="/home" routerLinkActive="active-link" (click)="closeMenu()">Home</a></li>
+            <li><a routerLink="/lexikon" routerLinkActive="active-link" (click)="closeMenu()">Lexikon</a></li>
+            <li><a routerLink="/team" routerLinkActive="active-link" (click)="closeMenu()">Team</a></li>
+            <li><a routerLink="/symptom-Checker" routerLinkActive="active-link" (click)="closeMenu()">Symptom-Checker</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            @if (auth.isLoggedIn()) {
+                <a routerLink="/account" class="mobile-account-link" (click)="closeMenu()">Mein Account</a>
+                <button class="btn-primary download-btn" (click)="logout()">Abmelden</button>
+            } @else {
+                <a routerLink="/login" class="btn-primary download-btn" (click)="closeMenu()">Login</a>
+            }
+        </div>
+    </div>
 </header>
