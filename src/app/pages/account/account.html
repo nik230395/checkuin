@@ -78,6 +78,48 @@
       }
     </section>
 
+    <!-- ── PASSWORT ÄNDERN ──────────────────────────────────────────────── -->
+    <section class="account-section fade-in">
+      <h2>Sicherheit</h2>
+
+      @if (pwSuccess()) {
+        <div class="msg-success">{{ pwSuccess() }}</div>
+      }
+
+      @if (!showPasswordForm()) {
+        <div class="account-actions glass">
+          <button class="btn-secondary" (click)="showPasswordForm.set(true)">Passwort ändern</button>
+        </div>
+      } @else {
+        <form class="pw-form glass"
+              (submit)="$event.preventDefault(); changePassword(curPw.value, newPw.value, confirmPw.value)">
+          <div class="pw-field">
+            <label for="curPw">Aktuelles Passwort</label>
+            <input #curPw type="password" id="curPw" placeholder="••••••••" required>
+          </div>
+          <div class="pw-field">
+            <label for="newPw">Neues Passwort</label>
+            <input #newPw type="password" id="newPw" placeholder="Mind. 8 Zeichen" required>
+          </div>
+          <div class="pw-field">
+            <label for="confirmPw">Neues Passwort bestätigen</label>
+            <input #confirmPw type="password" id="confirmPw" placeholder="••••••••" required>
+          </div>
+          @if (pwError()) {
+            <div class="pw-error">{{ pwError() }}</div>
+          }
+          <div class="pw-actions">
+            <button type="submit" class="btn-primary" [disabled]="pwLoading()">
+              @if (pwLoading()) { Wird gespeichert… } @else { Passwort speichern }
+            </button>
+            <button type="button" class="btn-secondary" (click)="showPasswordForm.set(false); pwError.set('')">
+              Abbrechen
+            </button>
+          </div>
+        </form>
+      }
+    </section>
+
     <!-- ── ACCOUNT-AKTIONEN ──────────────────────────────────────────────── -->
     <section class="account-section fade-in">
       <h2>Account-Verwaltung</h2>

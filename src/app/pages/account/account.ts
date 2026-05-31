@@ -1,9 +1,11 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { SessionService } from '../../services/session.service';
 import { SessionStatusResponse, UserProfile } from '../../models/models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-account',
@@ -16,6 +18,7 @@ export class Account implements OnInit {
   private session = inject(SessionService);
   private router  = inject(Router);
   private route   = inject(ActivatedRoute);
+  private http    = inject(HttpClient);
 
   profile      = signal<UserProfile | null>(null);
   sessions     = signal<SessionStatusResponse[]>([]);
@@ -26,6 +29,12 @@ export class Account implements OnInit {
   errorMsg     = signal('');
   showDeleteConfirm = signal(false);
   exportingId  = signal<number | null>(null);
+
+  // Passwort ändern
+  showPasswordForm = signal(false);
+  pwLoading        = signal(false);
+  pwSuccess        = signal('');
+  pwError          = signal('');
 
   ngOnInit() {
     if (!this.auth.isLoggedIn()) {
@@ -126,6 +135,38 @@ export class Account implements OnInit {
         this.deleting.set(false);
         this.errorMsg.set('Account konnte nicht gelöscht werden. Bitte erneut versuchen.');
         this.showDeleteConfirm.set(false);
+      }
+    });
+  }
+
+  changePassword(currentPw: string, newPw: string, confirmPw: string) {
+    this.pwError.set('');
+    this.pwSuccess.set('');
+    if (!currentPw || !newPw || !confirmPw) {
+      this.pwError.set('Bitte alle Felder ausfüllen.');
+      return;
+    }
+    if (newPw.length < 8) {
+      this.pwError.set('Neues Passwort muss mindestens 8 Zeichen lang sein.');
+      return;
+    }
+    if (newPw !== confirmPw) {
+      this.pwError.set('Neues Passwort und Bestätigung stimmen nicht überein.');
+      return;
+    }
+    this.pwLoading.set(true);
+    this.http.put<{message?: string; error?: string}>(
+      `${environment.apiUrl}/user/me/password`,
+      { currentPassword: currentPw, newPassword: newPw }
+    ).subscribe({
+      next: () => {
+        this.pwLoading.set(false);
+        this.pwSuccess.set('Passwort erfolgreich geändert.');
+        this.showPasswordForm.set(false);
+      },
+      error: (err) => {
+        this.pwLoading.set(false);
+        this.pwError.set(err.error?.error ?? 'Passwort konnte nicht geändert werden.');
       }
     });
   }
