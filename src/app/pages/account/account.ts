@@ -35,6 +35,9 @@ export class Account implements OnInit {
   pwLoading        = signal(false);
   pwSuccess        = signal('');
   pwError          = signal('');
+  showCur          = false;
+  showNew          = false;
+  showConfirm      = false;
 
   ngOnInit() {
     if (!this.auth.isLoggedIn()) {
