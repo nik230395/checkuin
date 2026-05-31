@@ -25,6 +25,7 @@ export class Login implements OnInit {
   successMsg = signal('');
   // for "resend verification" flow
   unverifiedUsername = signal('');
+  showPassword = false;
 
   setMode(m: 'login' | 'register' | 'forgot') {
     this.mode.set(m);
@@ -32,6 +33,7 @@ export class Login implements OnInit {
     this.error.set('');
     this.successMsg.set('');
     this.unverifiedUsername.set('');
+    this.showPassword = false;
   }
 
   forgotPassword(email: string) {
